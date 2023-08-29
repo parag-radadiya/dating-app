@@ -2,11 +2,11 @@ import mongoose from 'mongoose';
 // TODO: implement in the future
 import config from 'config/config';
 import { logger } from 'config/logger';
-import socketAPI from 'appEvents/socketAPI';
-import redisAdapter from 'socket.io-redis';
+// import socketAPI from 'appEvents/socketAPI';
+// import redisAdapter from 'socket.io-redis';
 import app from './app';
 
-const { initSockets } = require('appEvents/handler');
+// const { initSockets } = require('appEvents/handler');
 
 let server;
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
@@ -15,9 +15,9 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
     logger.info(`Listening to port ${config.port}`);
   });
   // check whether Socket is enabled or not TODO: implement in the future
-  socketAPI.io.adapter(redisAdapter({ host: config.redis.host, port: config.redis.port }));
-  socketAPI.io.attach(server);
-  initSockets();
+  // socketAPI.io.adapter(redisAdapter({ host: config.redis.host, port: config.redis.port }));
+  // socketAPI.io.attach(server);
+  // initSockets();
 });
 const exitHandler = () => {
   if (server) {
