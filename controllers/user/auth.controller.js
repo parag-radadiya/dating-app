@@ -12,8 +12,8 @@ import sendSms from '../../config/twillioServices';
 export const register = catchAsync(async (req, res) => {
   const { body } = req;
   const user = await userService.createUser(body);
-  const emailVerifyToken = await tokenService.generateVerifyEmailToken(user.email);
-  emailService.sendEmailVerificationEmail(user, emailVerifyToken).then().catch();
+  // const emailVerifyToken = await tokenService.generateVerifyEmailToken(user.email);
+  // emailService.sendEmailVerificationEmail(user, emailVerifyToken).then().catch();
   res.status(httpStatus.OK).send({
     results: {
       success: true,
