@@ -82,16 +82,17 @@ export const verifyCode = async (verificationRequest) => {
   return tokenDoc;
 };
 
-export const verifyOtp = async (email, otp) => {
-  const user = await userService.getOne({ email });
+export const verifyOtp = async (mobileNumber, otp) => {
+  const user = await userService.getOne({ mobileNumber });
   if (!user) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'no user found with this email');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'no user found with this mobileNumber');
   }
   if (user.emailVerified) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'user already verified!');
   }
   // eslint-disable-next-line eqeqeq
   const otpCode = _.find(user.codes, (code) => code.code == otp && code.codeType === EnumCodeTypeOfCode.LOGIN);
+
   if (!otpCode || otpCode.expirationDate < Date.now()) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'otp is Invalid');
   }

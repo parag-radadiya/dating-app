@@ -1,20 +1,19 @@
-const twilio = require('twilio');
-require('dotenv').config();
+import config from './config';
 
-const accountSid = 'AC2601211d5cc249b20ef965d097d1b8ab';
-const authToken = '35c0ef6c90b8c9379615e612e132ecaa';
+const twilio = require('twilio');
+
+const accountSid = config.twillio.sid;
+const { authToken } = config.twillio;
 
 const client = twilio(accountSid, authToken);
 
 // +14254032633
-const sendSms = (phone, message) => {
-  client.messages
-    .create({
-      body: message,
-      from: '+14254032633',
-      to: `+91${phone}`,
-    })
-    .then((data) => console.log('message.sid ===', data.sid));
+const sendSms = async (phone, message) => {
+  return client.messages.create({
+    body: message,
+    from: '+14254032633',
+    to: `+91${phone}`,
+  });
 };
 
 module.exports = sendSms;

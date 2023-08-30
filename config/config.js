@@ -38,6 +38,8 @@ const envVarsSchema = Joi.object()
     GITHUB_CLIENT_SECRET: Joi.string().description('Apple TeamId is required'),
     STRIPE_KEY: Joi.string().description('Stripe Secret Key required'),
     STRIPE_GATEWAY_ID: Joi.string().description('Stripe Gateway Id required'),
+    TWILLIO_ACCOUNT_SID: Joi.string().description('TWILLIO_ACCOUNT_SID required'),
+    TWILLIO_AUTH_TOKEN: Joi.string().description('TWILLIO_AUTH_TOKEN required'),
   })
   .unknown();
 const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
@@ -54,6 +56,10 @@ export default {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     },
+  },
+  twillio: {
+    sid: envVars.TWILLIO_ACCOUNT_SID,
+    authToken: envVars.TWILLIO_AUTH_TOKEN,
   },
   jwt: {
     secret: envVars.JWT_SECRET,

@@ -23,9 +23,9 @@ export const register = catchAsync(async (req, res) => {
 });
 
 export const login = catchAsync(async (req, res) => {
-  const { email, password } = req.body;
+  const { mobileNumber, password } = req.body;
   const { deviceToken } = req.body;
-  const user = await authService.loginUserWithEmailAndPassword(email, password);
+  const user = await authService.loginUserWithEmailAndPassword(mobileNumber, password);
   const tokens = await tokenService.generateAuthTokens(user);
   if (deviceToken) {
     const updatedUser = await userService.addDeviceToken(user, req.body);
@@ -90,8 +90,8 @@ export const verifyResetCode = catchAsync(async (req, res) => {
 
 export const verifyOtp = catchAsync(async (req, res) => {
   const { body } = req;
-  const { otp, email } = body;
-  await tokenService.verifyOtp(email, otp);
+  const { otp, mobileNumber } = body;
+  await tokenService.verifyOtp(mobileNumber, otp);
   res.status(httpStatus.OK).send({ results: { success: true } });
 });
 

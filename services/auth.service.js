@@ -15,17 +15,17 @@ import { generateOtp } from 'utils/common';
  * @param {string} password
  * @returns {Promise<User>}
  */
-export const loginUserWithEmailAndPassword = async (email, password) => {
-  const user = await userService.getOne({ email });
+export const loginUserWithEmailAndPassword = async (mobileNumber, password) => {
+  const user = await userService.getOne({ mobileNumber });
   if (!user) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect email or password');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect mobileNumber or password');
   }
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect email or password');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect mobileNumber or password');
   }
   if (!user.emailVerified) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Please check your email and verify it to continue login in to app');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Please check your mobileNumber and verify it to continue login in to app');
   }
   return user;
 };
