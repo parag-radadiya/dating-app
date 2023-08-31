@@ -20,7 +20,7 @@ export const register = {
 
 export const login = {
   body: Joi.object().keys({
-    mobileNumber: Joi.string().required(),
+    mobileNumber: Joi.number().required(),
     password: Joi.string().required(),
     deviceToken: Joi.string().allow(''),
   }),
