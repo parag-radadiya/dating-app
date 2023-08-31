@@ -94,7 +94,6 @@ const UserSchema = new mongoose.Schema({
   nickName: {
     type: String,
     private: true,
-    unique: true,
   },
   dateOfBirth: {
     type: Date,
