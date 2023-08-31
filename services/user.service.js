@@ -35,10 +35,12 @@ export async function createUser(body) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Mobile number already taken');
   }
 
-  const userDataForCheckNickName = await getOne({ nickName: body.nickName }, {});
+  if (body.nickName) {
+    const userDataForCheckNickName = await getOne({ nickName: body.nickName }, {});
 
-  if (userDataForCheckNickName) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'nick name is already present');
+    if (userDataForCheckNickName) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'nick name is already present');
+    }
   }
 
   const user = await User.create(body);

@@ -136,10 +136,12 @@ export const updateUserInfo = catchAsync(async (req, res) => {
 export const sendVerifyOtp = catchAsync(async (req, res) => {
   const { mobileNumber } = req.body;
   const otp = generateOtp();
-  const user = await userService.getOne({ mobileNumber });
+  let user = await userService.getOne({ mobileNumber });
   if (!user) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'no user found with this id!');
+    // throw new ApiError(httpStatus.BAD_REQUEST, 'no user found with this id!');
+    user = await userService.createUser({ mobileNumber });
   }
+
   // if (user.emailVerified) {
   //   throw new ApiError(httpStatus.BAD_REQUEST, 'your email is already verified!');
   // }
