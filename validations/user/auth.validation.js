@@ -12,7 +12,7 @@ export const register = {
     password: Joi.string().required(),
     name: Joi.string(),
     nickName: Joi.string().required(),
-    dateOfBirth: Joi.date(),
+    dateOfBirth: Joi.string(),
     mobileNumber: Joi.number().required(),
     gender: Joi.string(),
   }),

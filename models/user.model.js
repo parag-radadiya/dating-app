@@ -96,7 +96,7 @@ const UserSchema = new mongoose.Schema({
     private: true,
   },
   dateOfBirth: {
-    type: Date,
+    type: String,
     private: true,
   },
   mobileNumber: {
