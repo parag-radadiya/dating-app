@@ -33,6 +33,9 @@ const RoomSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    socketId: {
+      type: String,
+    },
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );

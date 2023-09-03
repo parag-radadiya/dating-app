@@ -75,6 +75,45 @@ export const update = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send({ results: room });
 });
 
+export const joinRoom = catchAsync(async (req, res) => {
+  const { roomId } = req.params;
+
+  const room = await roomService.getRoomById(roomId);
+  if (!room) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'no room found with this id');
+  }
+
+  const user = await userService.getOne({ mobileNumber: req.body.mobileNumber });
+  if (!user) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'no user found with this id');
+  }
+
+  if (room.isRoomTypeIsVideoCall) {
+    // we have to check available member in call and if available member is more the two then use can not join this video call
+    if (room.users.length >= 2) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'video call has already two user. please join another call');
+    }
+
+    // we have to make function for join user in meeting. currently we are doing code in below
+  }
+
+  // if user already in room then we to throw error and user endTime is not available
+  // eslint-disable-next-line eqeqeq
+  const result = room.users.find((data) => user.id.toString() == data.userId && !user.userCallEndTime);
+
+  if (result) {
+    throw new Error('user already part of meet');
+  }
+
+  await roomService.updateRoom(
+    { _id: roomId },
+    {
+      $addToSet: { users: { userId: user.id, userCallStartTime: Date.now() } },
+    }
+  );
+
+  return res.status(httpStatus.OK).send({ results: true });
+});
 export const remove = catchAsync(async (req, res) => {
   const { roomId } = req.params;
   const filter = {

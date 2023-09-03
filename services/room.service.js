@@ -1,4 +1,6 @@
 import { Room } from 'models';
+import httpStatus from 'http-status';
+import ApiError from '../utils/ApiError';
 
 export async function getRoomById(id, options = {}) {
   const room = await Room.findById(id, options.projection, options);
@@ -43,4 +45,17 @@ export async function removeRoom(filter) {
 export async function removeManyRoom(filter) {
   const room = await Room.deleteMany(filter);
   return room;
+}
+
+export async function isRoomPresent(roomId) {
+  const room = await getRoomById(roomId);
+  if (!room) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'no room found with this id');
+  }
+  return room;
+}
+
+export async function getUserBySocketId(params) {
+  const { roomId, socketId } = params;
+  return getOne({ _id: roomId, socketId });
 }

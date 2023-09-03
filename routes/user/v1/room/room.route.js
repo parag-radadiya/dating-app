@@ -8,7 +8,7 @@ const router = express.Router();
 router
   .route('/')
   /**
-   * createTest
+   * create room2
    * */
   .post(
     // auth('user'), // todo : add after flow completed
@@ -19,5 +19,16 @@ router
    * getTest
    * */
   .get(auth('user'), validate(roomValidation.getRoom), roomController.list);
+
+router
+  .route('/join-room/:roomId')
+  /**
+   * createTest
+   * */
+  .post(
+    // auth('user'), // todo : add after flow completed
+    validate(roomValidation.joinRoom),
+    roomController.joinRoom
+  );
 
 export default router;
