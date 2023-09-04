@@ -27,6 +27,12 @@ const RoomSchema = new mongoose.Schema(
       ref: 'User',
     },
     /**
+     * category
+     * */
+    category: {
+      type: String,
+    },
+    /**
      * updated By
      * */
     updatedBy: {

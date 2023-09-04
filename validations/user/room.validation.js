@@ -24,3 +24,10 @@ export const joinRoom = {
     roomId: Joi.objectId().required(),
   }),
 };
+
+export const getRoomById = {
+  // todo : add validation here after creating proper api for calling functionality
+  params: Joi.object().keys({
+    roomId: Joi.objectId().required(),
+  }),
+};
