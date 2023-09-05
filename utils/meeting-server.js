@@ -54,11 +54,15 @@ export function listenMessage(roomId, socket, meetingServer) {
 }
 
 export function initMeetingServer(server) {
-  // eslint-disable-next-line global-require
-  const meetingServer = require('socket.io')(server);
+  try {
+    // eslint-disable-next-line global-require
+    const meetingServer = require('socket.io')(server);
 
-  meetingServer.on('connection', (socket) => {
-    const roomId = socket.handshake.query.id;
-    listenMessage(roomId, socket, meetingServer);
-  });
+    meetingServer.on('connection', (socket) => {
+      const roomId = socket.handshake.query.id;
+      listenMessage(roomId, socket, meetingServer);
+    });
+  } catch (e) {
+    console.log(' === error from server ===> ', e);
+  }
 }

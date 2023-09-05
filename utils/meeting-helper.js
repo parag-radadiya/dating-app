@@ -34,6 +34,9 @@ export async function addUser(socket, { roomId, userId }) {
     logger.info('user already part of meet');
     return room;
   }
+
+  console.log(' === variable === userId ==> ', userId);
+
   return roomService.updateRoom(
     { _id: roomId },
     {
