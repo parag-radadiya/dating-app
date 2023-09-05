@@ -1,4 +1,5 @@
 import { MeetingPayloadEnum } from '../models/enum.model';
+import { logger } from '../config/logger';
 
 const meetingHelper = require('./meeting-helper');
 
@@ -19,6 +20,13 @@ export async function handleMessage(roomId, socket, message, meetingServer) {
   } else {
     payload = message;
   }
+
+  logger.info(` === payload.type ===>  ${payload.type}`);
+  logger.info(` === roomId ===>  ${roomId} `);
+  logger.info(` === socket ===>  ${socket} `);
+  logger.info(` === meetingServer ===> ${meetingServer}`);
+  logger.info(` === payload ===> ${payload}`);
+
   switch (payload.type) {
     case MeetingPayloadEnum.JOIN_MEETING:
       meetingHelper.joinRoom(roomId, socket, meetingServer, payload);
