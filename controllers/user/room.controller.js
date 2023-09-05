@@ -105,14 +105,17 @@ export const joinRoom = catchAsync(async (req, res) => {
     throw new Error('user already part of meet');
   }
 
-  await roomService.updateRoom(
+  const getUpdateRoom = await roomService.updateRoom(
     { _id: roomId },
     {
       $addToSet: { users: { userId: user.id, userCallStartTime: Date.now() } },
+    },
+    {
+      new: true,
     }
   );
 
-  return res.status(httpStatus.OK).send({ results: true });
+  return res.status(httpStatus.OK).send({ results: getUpdateRoom });
 });
 export const remove = catchAsync(async (req, res) => {
   const { roomId } = req.params;
