@@ -112,6 +112,10 @@ export const joinRoom = catchAsync(async (req, res) => {
     },
     {
       new: true,
+      populate: {
+        path: 'users.userID',
+        model: 'User',
+      },
     }
   );
 

@@ -1,4 +1,5 @@
 import httpStatus from 'http-status';
+import { logger } from 'config/logger';
 import { MeetingPayloadEnum } from '../models/enum.model';
 import { roomService } from '../services';
 import ApiError from './ApiError';
@@ -19,10 +20,10 @@ export async function addUser(socket, { roomId, userId }) {
 
   if (room.isRoomTypeIsVideoCall) {
     // we have to check available member in call and if available member is more the two then use can not join this video call
-    if (room.users.length >= 2) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'video call has already two user. please join another call');
-    }
-
+    // todo : we have to check this one and update according to our requirement
+    // if (room.users.length >= 2) {
+    //   throw new ApiError(httpStatus.BAD_REQUEST, 'video call has already two user. please join another call');
+    // }
     // we have to make function for join user in meeting. currently we are doing code in below
   }
 
@@ -30,9 +31,9 @@ export async function addUser(socket, { roomId, userId }) {
   // eslint-disable-next-line eqeqeq
   const result = room.users.find((data) => data.userId == userId.toString());
   if (result) {
-    throw new Error('user already part of meet');
+    logger.info('user already part of meet');
+    return room;
   }
-
   return roomService.updateRoom(
     { _id: roomId },
     {

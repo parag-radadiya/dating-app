@@ -28,7 +28,7 @@ export async function createRoom(body = {}) {
 }
 
 export async function updateRoom(filter, body, options = {}) {
-  const room = await Room.findOneAndUpdate(filter, body, options).populate('users.userID');
+  const room = await Room.findOneAndUpdate(filter, body, options);
   return room;
 }
 
