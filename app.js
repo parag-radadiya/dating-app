@@ -23,6 +23,9 @@ import { successHandler, errorHandler as morganErrorHandler } from 'config/morga
 
 const actuator = require('express-actuator');
 
+// eslint-disable-next-line
+require('/utils/socketInit');
+
 mongoosePaginate.paginate.options = {
   customLabels: { docs: 'results', totalDocs: 'totalResults' },
 };

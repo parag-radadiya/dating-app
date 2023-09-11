@@ -5,8 +5,9 @@ import { logger } from 'config/logger';
 // import socketAPI from 'appEvents/socketAPI';
 // import redisAdapter from 'socket.io-redis';
 import app from './app';
+import { initMeetingServerBase } from './utils/socketInit';
 
-const { initMeetingServer } = require('./utils/meeting-server');
+// const { initMeetingServer } = require('./utils/meeting-server');
 // const { initSockets } = require('appEvents/handler');
 
 let server;
@@ -15,7 +16,8 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   server = app.listen(config.port, () => {
     logger.info(`Listening to port ${config.port}`);
     try {
-      initMeetingServer(server);
+      // initMeetingServer(server);
+      initMeetingServerBase(server);
       logger.info(`meeting server initialized`);
     } catch (e) {
       logger.error(`error from connecting room server ${e.message}`);
