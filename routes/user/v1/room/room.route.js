@@ -16,7 +16,7 @@ router
     roomController.create
   )
   /**
-   * getTest
+   * get all rooms
    * */
   .get(
     // auth('user'),

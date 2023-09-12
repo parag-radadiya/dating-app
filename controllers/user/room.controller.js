@@ -54,6 +54,7 @@ export const create = catchAsync(async (req, res) => {
     users: [
       {
         userId: user.id,
+        mobileNumber: user.mobileNumber,
         userCallStartTime: new Date(),
       },
     ],

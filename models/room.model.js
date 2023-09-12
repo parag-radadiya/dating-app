@@ -7,6 +7,10 @@ const roomUserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  mobileNumber: {
+    type: Number,
+    private: true,
+  },
   userCallStartTime: {
     type: Date,
   },
