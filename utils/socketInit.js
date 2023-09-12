@@ -47,6 +47,16 @@ export function initMeetingServerBase(server) {
           iceCandidate,
         });
       });
+
+      socket.on('endMeeting', (data) => {
+        const { callerId } = data;
+
+        socket.to(callerId).emit('userEndedMeeting', {
+          callee: socket.user,
+          callerId: data.callerId,
+        });
+        // socket.disconnect();
+      });
     });
   } catch (e) {
     console.log(' === error from server ===> ', e);

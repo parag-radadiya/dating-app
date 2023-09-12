@@ -109,7 +109,7 @@ export const joinRoom = catchAsync(async (req, res) => {
   const getUpdateRoom = await roomService.updateRoom(
     { _id: roomId },
     {
-      $addToSet: { users: { userId: user.id, userCallStartTime: Date.now() } },
+      $addToSet: { users: { userId: user.id, userCallStartTime: Date.now(), mobileNumber: user.mobileNumber } },
     },
     {
       new: true,
