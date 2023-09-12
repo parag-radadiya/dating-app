@@ -91,10 +91,9 @@ export const joinRoom = catchAsync(async (req, res) => {
 
   if (room.isRoomTypeIsVideoCall) {
     // we have to check available member in call and if available member is more the two then use can not join this video call
-    if (room.users.length >= 2) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'video call has already two user. please join another call');
-    }
-
+    // if (room.users.length >= 2) {
+    //   throw new ApiError(httpStatus.BAD_REQUEST, 'video call has already two user. please join another call');
+    // }
     // we have to make function for join user in meeting. currently we are doing code in below
   }
 
@@ -103,7 +102,7 @@ export const joinRoom = catchAsync(async (req, res) => {
   const result = room.users.find((data) => user.id.toString() == data.userId && !user.userCallEndTime);
 
   if (result) {
-    throw new Error('user already part of meet');
+    // throw new Error('user already part of meet');
   }
 
   const getUpdateRoom = await roomService.updateRoom(
