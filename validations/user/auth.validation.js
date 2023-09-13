@@ -11,6 +11,7 @@ export const register = {
     dateOfBirth: Joi.string(),
     mobileNumber: Joi.number().required(),
     gender: Joi.string(),
+    role: Joi.string().valid(...Object.values(enumFields.EnumRoleOfUser)),
   }),
 };
 

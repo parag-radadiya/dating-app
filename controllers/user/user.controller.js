@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import { userService } from 'services';
 import { catchAsync } from 'utils/catchAsync';
 import { pick } from '../../utils/pick';
+import { EnumRoleOfUser } from '../../models/enum.model';
 
 export const get = catchAsync(async (req, res) => {
   const { userId } = req.params;
@@ -20,6 +21,15 @@ export const list = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send({ results: user });
 });
 
+export const getAvailableTrainerForMeet = catchAsync(async (req, res) => {
+  const filter = {
+    role: EnumRoleOfUser.TRAINER,
+    availableForMeet: true,
+  };
+  const options = {};
+  const user = await userService.getUserList(filter, options);
+  return res.status(httpStatus.OK).send({ results: user });
+});
 export const paginate = catchAsync(async (req, res) => {
   const { query } = req;
   const sortingObj = pick(query, ['sort', 'order']);

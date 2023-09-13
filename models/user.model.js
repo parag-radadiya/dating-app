@@ -67,12 +67,22 @@ const UserSchema = new mongoose.Schema({
     private: true,
   },
   /**
+   * For availableForMeet
+   * */
+  availableForMeet: {
+    type: Boolean,
+    default: true,
+  },
+  /**
    * role
    * */
   role: {
     type: String,
     enum: Object.values(enumModel.EnumRoleOfUser),
     default: enumModel.EnumRoleOfUser.USER,
+  },
+  userRegistered: {
+    type: Boolean,
   },
   /**
    * custom server authentication
@@ -89,19 +99,15 @@ const UserSchema = new mongoose.Schema({
   },
   nickName: {
     type: String,
-    private: true,
   },
   dateOfBirth: {
     type: String,
-    private: true,
   },
   mobileNumber: {
     type: Number,
-    private: true,
   },
   gender: {
     type: String,
-    private: true,
   },
   /**
    * facebook based authentication
@@ -128,7 +134,7 @@ const UserSchema = new mongoose.Schema({
     type: [DeviceTokenSchema],
   },
   /**
-   * github based authentication
+   * GitHub based authentication
    * */
   githubProvider: {
     type: OauthSchema,

@@ -46,6 +46,12 @@ const RoomSchema = new mongoose.Schema(
     socketId: {
       type: String,
     },
+    roomStartTime: {
+      type: Date,
+    },
+    roomEndTime: {
+      type: Date,
+    },
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );

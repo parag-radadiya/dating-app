@@ -5,6 +5,7 @@ const EnumCodeTypeOfCode = {
 const EnumRoleOfUser = {
   USER: 'user',
   ADMIN: 'admin',
+  TRAINER: 'trainer',
 };
 const EnumPlatformOfDeviceToken = {
   ANDROID: 'android',

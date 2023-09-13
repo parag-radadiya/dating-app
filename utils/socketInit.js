@@ -1,9 +1,8 @@
-let IO;
 // eslint-disable-next-line import/prefer-default-export
 export function initMeetingServerBase(server) {
   try {
     // eslint-disable-next-line global-require
-    IO = require('socket.io')(server);
+    const IO = require('socket.io')(server);
 
     IO.use((socket, next) => {
       if (socket.handshake.query) {
@@ -51,6 +50,7 @@ export function initMeetingServerBase(server) {
       socket.on('endMeeting', (data) => {
         const { callerId } = data;
 
+        console.log(' === variable ===>  end meeting ');
         socket.to(callerId).emit('userEndedMeeting', {
           callee: socket.user,
           callerId: data.callerId,

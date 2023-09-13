@@ -47,6 +47,10 @@ export const create = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'no user found with this id');
   }
 
+  if (user.availableForMeet && !user.availableForMeet) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'user is not available for meet');
+  }
+
   const createRoomObj = {
     updatedBy: user.id,
     createdBy: user.id,
@@ -61,6 +65,13 @@ export const create = catchAsync(async (req, res) => {
   };
 
   const room = await roomService.createRoom(createRoomObj);
+
+  await userService.updateUser(
+    { mobileNumber: body.mobileNumber },
+    {
+      availableForMeet: false,
+    }
+  );
   return res.status(httpStatus.CREATED).send({ results: room });
 });
 
@@ -91,9 +102,9 @@ export const joinRoom = catchAsync(async (req, res) => {
 
   if (room.isRoomTypeIsVideoCall) {
     // we have to check available member in call and if available member is more the two then use can not join this video call
-    // if (room.users.length >= 2) {
-    //   throw new ApiError(httpStatus.BAD_REQUEST, 'video call has already two user. please join another call');
-    // }
+    if (room.users.length >= 2) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'video call has already two user. please join another call');
+    }
     // we have to make function for join user in meeting. currently we are doing code in below
   }
 
@@ -102,12 +113,13 @@ export const joinRoom = catchAsync(async (req, res) => {
   const result = room.users.find((data) => user.id.toString() == data.userId && !user.userCallEndTime);
 
   if (result) {
-    // throw new Error('user already part of meet');
+    throw new Error('user already part of meet');
   }
 
   const getUpdateRoom = await roomService.updateRoom(
     { _id: roomId },
     {
+      roomStartTime: Date.now(),
       $addToSet: { users: { userId: user.id, userCallStartTime: Date.now(), mobileNumber: user.mobileNumber } },
     },
     {
@@ -116,6 +128,13 @@ export const joinRoom = catchAsync(async (req, res) => {
         path: 'users.userID',
         model: 'User',
       },
+    }
+  );
+
+  await userService.updateUser(
+    { mobileNumber: req.body.mobileNumber },
+    {
+      availableForMeet: false,
     }
   );
 

@@ -21,6 +21,12 @@ router
    * */
   .get(validate(userValidation.paginatedUser), userController.paginate);
 router
+  .route('/get-available-trainer-for-meet')
+  /**
+   * get-available-trainer-for-meet
+   * */
+  .get(validate(userValidation.getUser), userController.getAvailableTrainerForMeet);
+router
   .route('/:userId')
   /**
    * updateUser

@@ -27,6 +27,10 @@ export async function getUserListWithPagination(filter, options = {}) {
 export async function createUser(body) {
   const userData = await getOne({ mobileNumber: body.mobileNumber }, {});
 
+  if (userData.userRegistered) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'user already registered');
+  }
+
   let user;
   if (userData) {
     // throw new ApiError(httpStatus.BAD_REQUEST, 'Mobile number already taken');
@@ -37,7 +41,7 @@ export async function createUser(body) {
       }
 
       // eslint-disable-next-line no-use-before-define
-      user = updateUser({ mobileNumber: body.mobileNumber }, body);
+      user = updateUser({ mobileNumber: body.mobileNumber }, body, { userRegistered: true });
     }
   } else {
     user = await User.create(body);
