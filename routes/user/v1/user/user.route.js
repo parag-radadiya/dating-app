@@ -21,11 +21,11 @@ router
    * */
   .get(validate(userValidation.paginatedUser), userController.paginate);
 router
-  .route('/get-available-trainer-for-meet')
+  .route('/get-available-trainer-for-meet/:userId')
   /**
    * get-available-trainer-for-meet
    * */
-  .get(validate(userValidation.getUser), userController.getAvailableTrainerForMeet);
+  .get(validate(userValidation.getAvailableTrainerForMeet), userController.getAvailableTrainerForMeet);
 router
   .route('/:userId')
   /**

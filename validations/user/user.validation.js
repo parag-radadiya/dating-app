@@ -72,6 +72,12 @@ export const getUser = {
   body: Joi.object().keys({}).unknown(true),
 };
 
+export const getAvailableTrainerForMeet = {
+  body: Joi.object().keys({}).unknown(true),
+  params: Joi.object().keys({
+    userId: Joi.objectId().required(),
+  }),
+};
 export const paginatedUser = {
   body: Joi.object().keys({}).unknown(true),
   query: Joi.object()

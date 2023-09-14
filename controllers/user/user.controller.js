@@ -25,6 +25,7 @@ export const getAvailableTrainerForMeet = catchAsync(async (req, res) => {
   const filter = {
     role: EnumRoleOfUser.TRAINER,
     availableForMeet: true,
+    _id: { $ne: req.params.userId },
   };
   const options = {};
   const user = await userService.getUserList(filter, options);
