@@ -31,3 +31,11 @@ export const getRoomById = {
     roomId: Joi.objectId().required(),
   }),
 };
+
+export const getMessageById = {
+  // todo : add validation here after creating proper api for calling functionality
+  body: Joi.object().keys({
+    loginUser: Joi.objectId().required(),
+    otherUser: Joi.objectId().required(),
+  }),
+};

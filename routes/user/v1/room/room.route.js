@@ -46,4 +46,15 @@ router
     roomController.get
   );
 
+router
+  .route('/message')
+  /**
+   * get last 100 messages
+   * */
+  .post(
+    // auth('user'), // todo : add after flow completed
+    validate(roomValidation.getMessageById),
+    roomController.getMessage
+  );
+
 export default router;

@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import { roomService, userService } from 'services';
+import { messageService, roomService, userService } from 'services';
 import { catchAsync } from 'utils/catchAsync';
 import { pick } from '../../utils/pick';
 import ApiError from '../../utils/ApiError';
@@ -12,6 +12,18 @@ export const get = catchAsync(async (req, res) => {
   const options = {};
   const room = await roomService.getOne(filter, options);
   return res.status(httpStatus.OK).send({ results: room });
+});
+
+export const getMessage = catchAsync(async (req, res) => {
+  const { loginUser, otherUser } = req.body;
+  const sendMessage = await messageService.getMessageList(
+    {
+      from: { $in: [loginUser, otherUser] },
+      to: { $in: [loginUser, otherUser] },
+    },
+    { sort: 'sendAt', limit: 100 }
+  );
+  return res.status(httpStatus.OK).send({ results: sendMessage });
 });
 
 export const list = catchAsync(async (req, res) => {
