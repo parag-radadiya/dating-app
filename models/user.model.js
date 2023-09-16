@@ -109,6 +109,9 @@ const UserSchema = new mongoose.Schema({
   gender: {
     type: String,
   },
+  isUserOnline: {
+    type: Boolean,
+  },
   /**
    * facebook based authentication
    * */

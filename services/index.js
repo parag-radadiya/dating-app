@@ -10,3 +10,4 @@ module.exports.notificationService = require('./notification.service');
 module.exports.stripeService = require('./stripe.service');
 module.exports.queueService = require('./queue.service');
 module.exports.roomService = require('./room.service');
+module.exports.messageService = require('./message.services');

@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import { logger } from '../config/logger';
-import { roomService, userService } from '../services';
+import { messageService, roomService, userService } from '../services';
 import ApiError from './ApiError';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -18,8 +18,18 @@ export function initMeetingServerBase(server) {
       }
     });
 
-    IO.on('connection', (socket) => {
+    IO.on('connection', async (socket) => {
       console.log(socket.user, 'Connected');
+      console.log(' === variable =socket user ==> ', socket.user);
+      if (socket.user) {
+        await userService.updateUser(
+          { mobileNumber: socket.user },
+          {
+            isUserOnline: true,
+          }
+        );
+      }
+      // todo : set user active in user table
       socket.join(socket.user);
 
       socket.on('makeCall', (data) => {
@@ -30,6 +40,47 @@ export function initMeetingServerBase(server) {
           roomId,
           isRoomTypeIsVideoCall,
         });
+      });
+
+      socket.on('sendMessage', async (data) => {
+        const { callerId, mobileNumber } = data;
+
+        // check if receiving message user is active or not
+        const getUserToSendMessage = await userService.getOne({ mobileNumber });
+        if (!getUserToSendMessage) {
+          throw new ApiError(httpStatus.NOT_FOUND, 'user not fount, please login back');
+        }
+        const getUserFromSendMessage = await userService.getOne({ mobileNumber: callerId });
+        if (!getUserFromSendMessage) {
+          throw new ApiError(httpStatus.NOT_FOUND, 'user not fount, please login back');
+        }
+        // create message
+        const createMessageBody = {
+          from: getUserFromSendMessage._id,
+          to: getUserToSendMessage._id,
+          message: data.message,
+          sendAt: Date.now(),
+        };
+        await messageService.createMessage(createMessageBody);
+        // get last 100 message
+        const sendMessage = await messageService.getMessageList(
+          {
+            from: { $in: [getUserToSendMessage._id, getUserFromSendMessage._id] },
+            to: { $in: [getUserToSendMessage._id, getUserFromSendMessage._id] },
+          },
+          { limit: 100 }
+        );
+        socket.emit('message', {
+          callee: socket.user,
+          sendMessage,
+        });
+
+        if (getUserToSendMessage.isUserOnline) {
+          socket.to(callerId).emit('messageReceived', {
+            callee: socket.user,
+            sendMessage,
+          });
+        }
       });
 
       socket.on('answerCall', async (data) => {
@@ -129,3 +180,11 @@ export function initMeetingServerBase(server) {
     console.log(' === error from server ===> ', e);
   }
 }
+
+/*
+ *  1. socket id store in user
+ *  2. add active field in user table so we can check what user is active or inactive
+ *  3. if user is active than we establise socket connection for both user
+ *  4. user can send and recive message using socket connection and all mesaage are store in db from socket event
+ *
+ * */

@@ -6,3 +6,4 @@ module.exports.Error = require('./error.model');
 module.exports.Room = require('./room.model');
 module.exports.Enum = require('./enum.model');
 module.exports.plugins = require('./plugins');
+module.exports.Message = require('./chat.model');
