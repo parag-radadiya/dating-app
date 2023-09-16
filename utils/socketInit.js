@@ -23,12 +23,12 @@ export function initMeetingServerBase(server) {
       socket.join(socket.user);
 
       socket.on('makeCall', (data) => {
-        console.log(' === makeCall room id data ===> ', data);
-        const { calleeId, roomId, sdpOffer } = data;
+        const { calleeId, roomId, sdpOffer, isRoomTypeIsVideoCall } = data;
         socket.to(calleeId).emit('newCall', {
           callerId: socket.user,
           sdpOffer,
           roomId,
+          isRoomTypeIsVideoCall,
         });
       });
 
