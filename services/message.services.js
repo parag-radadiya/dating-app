@@ -10,8 +10,8 @@ export async function getOne(query, options = {}) {
   return message;
 }
 
-export async function getMessageList(filter, options = {}) {
-  const message = await Message.find(filter, options.projection, options);
+export async function getLastHundreadMessageList(filter, options = {}) {
+  const message = await Message.find(filter, options.projection, options).sort({ createdAt: 1 });
   return message;
 }
 

@@ -63,12 +63,12 @@ export function initMeetingServerBase(server) {
         };
         await messageService.createMessage(createMessageBody);
         // get last 100 message
-        const sendMessage = await messageService.getMessageList(
+        const sendMessage = await messageService.getLastHundreadMessageList(
           {
             from: { $in: [getUserToSendMessage._id, getUserFromSendMessage._id] },
             to: { $in: [getUserToSendMessage._id, getUserFromSendMessage._id] },
           },
-          { limit: 100 }
+          { sort: 'createdAt', limit: 100 }
         );
         socket.emit('message', {
           callee: socket.user,

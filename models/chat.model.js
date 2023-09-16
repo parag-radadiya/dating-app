@@ -4,31 +4,34 @@ const { toJSON, softDelete } = require('./plugins');
 
 const { ObjectId } = mongoose.Schema.Types;
 
-const MessageSchema = mongoose.Schema({
-  from: {
-    type: ObjectId,
-    required: true,
-    ref: 'User',
+const MessageSchema = mongoose.Schema(
+  {
+    from: {
+      type: ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    to: {
+      type: ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    message: {
+      type: String,
+      required: true,
+    },
+    isReadMessage: {
+      type: Boolean,
+      default: false,
+      select: false,
+    },
+    sendAt: {
+      type: Number,
+      default: Date.now,
+    },
   },
-  to: {
-    type: ObjectId,
-    required: true,
-    ref: 'User',
-  },
-  message: {
-    type: String,
-    required: true,
-  },
-  isReadMessage: {
-    type: Boolean,
-    default: false,
-    select: false,
-  },
-  sendAt: {
-    type: Number,
-    default: Date.now,
-  },
-});
+  { timestamps: { createdAt: true, updatedAt: true } }
+);
 
 MessageSchema.plugin(toJSON);
 MessageSchema.plugin(mongoosePaginateV2);

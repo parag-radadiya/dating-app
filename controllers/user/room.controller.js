@@ -16,12 +16,12 @@ export const get = catchAsync(async (req, res) => {
 
 export const getMessage = catchAsync(async (req, res) => {
   const { loginUser, otherUser } = req.body;
-  const sendMessage = await messageService.getMessageList(
+  const sendMessage = await messageService.getLastHundreadMessageList(
     {
       from: { $in: [loginUser, otherUser] },
       to: { $in: [loginUser, otherUser] },
     },
-    { sort: 'sendAt', limit: 100 }
+    { sort: 'createdAt', limit: 100 }
   );
   return res.status(httpStatus.OK).send({ results: sendMessage });
 });
