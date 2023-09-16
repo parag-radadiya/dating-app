@@ -36,17 +36,6 @@ router
   );
 
 router
-  .route('/:roomId')
-  /**
-   * createTest
-   * */
-  .get(
-    // auth('user'), // todo : add after flow completed
-    validate(roomValidation.getRoomById),
-    roomController.get
-  );
-
-router
   .route('/message')
   /**
    * get last 100 messages
@@ -55,6 +44,17 @@ router
     // auth('user'), // todo : add after flow completed
     validate(roomValidation.getMessageById),
     roomController.getMessage
+  );
+
+router
+  .route('/:roomId')
+  /**
+   * createTest
+   * */
+  .get(
+    // auth('user'), // todo : add after flow completed
+    validate(roomValidation.getRoomById),
+    roomController.get
   );
 
 export default router;
