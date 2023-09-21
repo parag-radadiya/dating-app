@@ -33,6 +33,16 @@ export const list = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send({ results: room });
 });
 
+export const getAvailableAudioRoomForMeet = catchAsync(async (req, res) => {
+  const filter = {
+    isRoomTypeIsVideoCall: false,
+    roomEndTime: { $exists: false },
+  };
+  const options = {};
+  const room = await roomService.getRoomList(filter, options);
+  return res.status(httpStatus.OK).send({ results: room });
+});
+
 export const paginate = catchAsync(async (req, res) => {
   const { query } = req;
   const sortingObj = pick(query, ['sort', 'order']);

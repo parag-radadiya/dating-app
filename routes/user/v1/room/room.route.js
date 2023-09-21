@@ -25,6 +25,17 @@ router
   );
 
 router
+  .route('/getAvailableAudioRoom')
+  /**
+   * createTest
+   * */
+  .get(
+    // auth('user'),
+    validate(roomValidation.getRoom),
+    roomController.getAvailableAudioRoomForMeet
+  );
+
+router
   .route('/join-room/:roomId')
   /**
    * createTest

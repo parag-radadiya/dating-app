@@ -46,6 +46,9 @@ const RoomSchema = new mongoose.Schema(
     socketId: {
       type: String,
     },
+    sdpOffer: {
+      type: mongoose.Schema.Types.Mixed,
+    },
     roomStartTime: {
       type: Date,
     },

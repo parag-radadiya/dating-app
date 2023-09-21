@@ -32,13 +32,32 @@ export function initMeetingServerBase(server) {
       // todo : set user active in user table
       socket.join(socket.user);
 
-      socket.on('makeCall', (data) => {
+      socket.on('makeCall', async (data) => {
         const { calleeId, roomId, sdpOffer, isRoomTypeIsVideoCall } = data;
+        logger.info(
+          `calleeId:${calleeId} | roomId:${roomId} | sdpOffer:${sdpOffer} | isRoomTypeIsVideoCall:${isRoomTypeIsVideoCall}`
+        );
+        const room = await roomService.updateRoom({ _id: roomId }, { sdpOffer }, { new: true });
+        socket.to(calleeId).emit('newCall', {
+          room,
+          callerId: socket.user,
+          sdpOffer,
+          roomId,
+          isRoomTypeIsVideoCall,
+        });
+      });
+
+      socket.on('join-another-user', async (data) => {
+        const { calleeId, roomId, sdpOffer, isRoomTypeIsVideoCall } = data;
+        logger.info(
+          `calleeId:${calleeId} | roomId:${roomId} | sdpOffer:${sdpOffer} | isRoomTypeIsVideoCall:${isRoomTypeIsVideoCall}`
+        );
         socket.to(calleeId).emit('newCall', {
           callerId: socket.user,
           sdpOffer,
           roomId,
           isRoomTypeIsVideoCall,
+          ongoingCall: true,
         });
       });
 
@@ -84,6 +103,7 @@ export function initMeetingServerBase(server) {
       });
 
       socket.on('answerCall', async (data) => {
+        logger.info('answerCall  ======   answerCall');
         const { callerId, roomId, mobileNumber } = data;
         logger.info(`socket answerCall for roomId = ${roomId} and caller id ${callerId}`);
         const room = await roomService.getRoomById(roomId);
