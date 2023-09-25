@@ -12,7 +12,9 @@ export const createRoom = {
 
 export const getRoom = {
   // todo : add validation here after creating proper api for calling functionality
-  body: Joi.object().keys({}).unknown(true),
+  params: Joi.object().keys({
+    isRoomTypeIsVideoCall: Joi.boolean(),
+  }),
 };
 
 export const joinRoom = {
@@ -20,7 +22,7 @@ export const joinRoom = {
   body: Joi.object().keys({
     mobileNumber: Joi.number().required(),
   }),
-  params: Joi.object().keys({
+  query: Joi.object().keys({
     roomId: Joi.objectId().required(),
   }),
 };

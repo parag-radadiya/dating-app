@@ -8,6 +8,9 @@ import sendSms from '../../config/twillioServices';
 
 export const register = catchAsync(async (req, res) => {
   const { body } = req;
+
+  // set default image in user
+  body.profileImage = 'https://mydemobucket202.s3.amazonaws.com/profilePic';
   const user = await userService.createUser(body);
   // const emailVerifyToken = await tokenService.generateVerifyEmailToken(user.email);
   // emailService.sendEmailVerificationEmail(user, emailVerifyToken).then().catch();

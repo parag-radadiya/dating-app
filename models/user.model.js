@@ -136,6 +136,9 @@ const UserSchema = new mongoose.Schema({
   deviceTokens: {
     type: [DeviceTokenSchema],
   },
+  profileImage: {
+    type: String,
+  },
   /**
    * GitHub based authentication
    * */

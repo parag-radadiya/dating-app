@@ -7,3 +7,19 @@ export const preSignedPutUrl = catchAsync(async (req, res) => {
   const s3PutObject = await s3Service.validateExtensionForPutObject(body, user);
   return res.status(httpStatus.OK).send({ results: s3PutObject });
 });
+
+export const uploadS3Image = catchAsync(async (req, res) => {
+  // https://pngtree.com/freepng/faceless-male-profile-icon_7902585.html
+  const { url, key } = req.body;
+
+  const s3PutObject = await s3Service.uploadFileToS3(url, key);
+  // const s3PutObject = await s3Service.uploadFileToS3bucket({
+  //   "G:\dating-app-imoji\1.jfif"
+  //   "G:\dating-app-imoji\2.jfif"
+  //   "G:\dating-app-imoji\3.jfif"
+  // filepath: 'G://dating-app-imoji/12.jfif',
+  // uploadpath: '14',
+  // ContentType: 'png',
+  // });
+  return res.status(httpStatus.OK).send({ results: s3PutObject });
+});

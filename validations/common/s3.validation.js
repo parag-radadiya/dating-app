@@ -8,3 +8,10 @@ export const preSignedPutUrl = {
     contentType: Joi.string().required(),
   }),
 };
+
+export const uploadS3image = {
+  body: Joi.object().keys({
+    url: Joi.string().required(),
+    key: Joi.string().required(),
+  }),
+};

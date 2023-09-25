@@ -35,7 +35,7 @@ export function initMeetingServerBase(server) {
       socket.on('makeCall', async (data) => {
         const { calleeId, roomId, sdpOffer, isRoomTypeIsVideoCall } = data;
         logger.info(
-          `calleeId:${calleeId} | roomId:${roomId} | sdpOffer:${sdpOffer} | isRoomTypeIsVideoCall:${isRoomTypeIsVideoCall}`
+          `makeCall event calleeId:${calleeId} | roomId:${roomId} | sdpOffer:${sdpOffer} | isRoomTypeIsVideoCall:${isRoomTypeIsVideoCall}`
         );
         const room = await roomService.updateRoom({ _id: roomId }, { sdpOffer }, { new: true });
         socket.to(calleeId).emit('newCall', {
@@ -103,9 +103,8 @@ export function initMeetingServerBase(server) {
       });
 
       socket.on('answerCall', async (data) => {
-        logger.info('answerCall  ======   answerCall');
         const { callerId, roomId, mobileNumber } = data;
-        logger.info(`socket answerCall for roomId = ${roomId} and caller id ${callerId}`);
+        logger.info(`answerCall event callerId:${callerId} | roomId:${roomId} | mobileNumber:${mobileNumber}`);
         const room = await roomService.getRoomById(roomId);
         if (!room) {
           throw new ApiError(httpStatus.BAD_REQUEST, 'no room found with this id');

@@ -11,3 +11,4 @@ module.exports.stripeService = require('./stripe.service');
 module.exports.queueService = require('./queue.service');
 module.exports.roomService = require('./room.service');
 module.exports.messageService = require('./message.services');
+module.exports.emojiService = require('./emoji.service');

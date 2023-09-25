@@ -13,7 +13,12 @@ export async function getOne(query, options = {}) {
 }
 
 export async function getRoomList(filter, options = {}) {
-  const room = await Room.find(filter, options.projection, options);
+  const room = await Room.find(filter, options);
+  return room;
+}
+
+export async function getRoomWithPopulateUserData(filter = {}) {
+  const room = await Room.find(filter).populate('users.userId').exec();
   return room;
 }
 
