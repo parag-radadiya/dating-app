@@ -32,5 +32,5 @@ emojiSchema.plugin(softDelete, {
   deletedBy: 'deletedBy',
   deletedAt: 'deletedAt',
 });
-const emojiModel = mongoose.models.Test || mongoose.model('emoji', emojiSchema, 'Test');
+const emojiModel = mongoose.models.Emoji || mongoose.model('emoji', emojiSchema, 'Emoji');
 module.exports = emojiModel;

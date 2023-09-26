@@ -160,6 +160,16 @@ export function initMeetingServerBase(server) {
         });
       });
 
+      socket.on('sendEmojiToTrainer', async (data) => {
+        const { sdpAnswer, callerId, emojiData } = data;
+
+        socket.to(callerId).emit('sendEmojiToTrainerSide', {
+          callee: socket.user,
+          sdpAnswer,
+          emojiData,
+        });
+      });
+
       socket.on('IceCandidate', (data) => {
         const { calleeId } = data;
         const { iceCandidate } = data;

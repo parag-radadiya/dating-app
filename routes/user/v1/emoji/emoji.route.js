@@ -7,4 +7,6 @@ const router = express.Router();
 
 router.post('/', validate(emojiValidation.createEmoji), emojiController.create);
 
-router.get('/', validate(emojiValidation.getEmoji), emojiController.get);
+router.get('/', validate(emojiValidation.getEmoji), emojiController.list);
+
+export default router;

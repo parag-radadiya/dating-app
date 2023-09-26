@@ -38,7 +38,6 @@ export const paginate = catchAsync(async (req, res) => {
 export const create = catchAsync(async (req, res) => {
   const { body } = req;
   // body.createdBy = req.user;
-  // body.updatedBy = req.user;
   const emoji = await emojiService.createEmoji(body);
   return res.status(httpStatus.CREATED).send({ results: emoji });
 });
