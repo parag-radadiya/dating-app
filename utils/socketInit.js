@@ -162,10 +162,12 @@ export function initMeetingServerBase(server) {
 
       socket.on('sendEmojiToTrainer', async (data) => {
         const { callerId, emojiData } = data;
+        logger.info(`sendEmojiToTrainer event callerId:${callerId} `);
 
         socket.to(callerId).emit('sendEmojiToTrainerSide', {
           callee: socket.user,
           emojiData,
+          ...data,
         });
       });
 
