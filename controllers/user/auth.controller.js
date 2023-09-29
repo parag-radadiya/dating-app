@@ -26,6 +26,7 @@ export const login = catchAsync(async (req, res) => {
   const { mobileNumber, password } = req.body;
   const { deviceToken } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(mobileNumber, password);
+  console.log(' === user ===> ', user);
   const tokens = await tokenService.generateAuthTokens(user);
   if (deviceToken) {
     const updatedUser = await userService.addDeviceToken(user, req.body);
