@@ -36,6 +36,13 @@ router
   );
 
 router
+  .route('/get-history/:userId')
+  /**
+   * get user past room history
+   * */
+  .get(validate(roomValidation.getRoomHistory), roomController.getRoomHistory);
+
+router
   .route('/join-room/:roomId')
   /**
    * createTest

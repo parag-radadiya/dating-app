@@ -17,6 +17,13 @@ export const getRoom = {
   }),
 };
 
+export const getRoomHistory = {
+  // todo : add validation here after creating proper api for calling functionality
+  params: Joi.object().keys({
+    userId: Joi.objectId().required(),
+  }),
+};
+
 export const joinRoom = {
   // todo : add validation here after creating proper api for calling functionality
   body: Joi.object().keys({
