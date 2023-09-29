@@ -42,8 +42,7 @@ export const getRoomHistory = catchAsync(async (req, res) => {
       },
     },
   };
-  const options = {};
-  const room = await roomService.getRoomList(filter, options);
+  const room = await roomService.getRoomWithPopulateUserData(filter);
   return res.status(httpStatus.OK).send({ results: room });
 });
 
