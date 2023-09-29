@@ -34,15 +34,15 @@ export const list = catchAsync(async (req, res) => {
 });
 
 export const getAvailableAudioRoomForMeet = catchAsync(async (req, res) => {
-  const { isRoomTypeIsVideoCall } = req.query;
+  // const { isRoomTypeIsVideoCall } = req.query;
   const filter = {
     roomEndTime: { $exists: false },
   };
-  if (isRoomTypeIsVideoCall) {
-    filter.isRoomTypeIsVideoCall = isRoomTypeIsVideoCall;
-  } else {
-    filter.isRoomTypeIsVideoCall = false;
-  }
+  // if (isRoomTypeIsVideoCall) {
+  //   filter.isRoomTypeIsVideoCall = isRoomTypeIsVideoCall;
+  // } else {
+  //   filter.isRoomTypeIsVideoCall = false;
+  // }
   const room = await roomService.getRoomWithPopulateUserData(filter);
   return res.status(httpStatus.OK).send({ results: room });
 });
