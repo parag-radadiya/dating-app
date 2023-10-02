@@ -20,6 +20,7 @@ export const getMessage = catchAsync(async (req, res) => {
     {
       from: { $in: [loginUser, otherUser] },
       to: { $in: [loginUser, otherUser] },
+      messageDeletedAll: false,
     },
     { sort: 'createdAt', limit: 100 }
   );
@@ -46,6 +47,57 @@ export const getRoomHistory = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send({ results: room });
 });
 
+export const updateMessage = catchAsync(async (req, res) => {
+  const { body } = req;
+  const { messageId } = req.params;
+  const filter = {
+    _id: messageId,
+  };
+
+  const options = { new: true };
+  const message = await messageService.updateMessage(filter, body, options);
+  return res.status(httpStatus.OK).send({ results: message });
+});
+
+export const getAllUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+
+  const filter = { _id: { $ne: userId } };
+
+  const user = await userService.getUserList(filter);
+
+  return res.status(httpStatus.OK).send({ results: user });
+});
+
+export const deleteMessage = catchAsync(async (req, res) => {
+  const { isDeleteTypeAll, userId } = req.body;
+  const { messageId } = req.body;
+  console.log('message id ===', messageId);
+  const filter = {
+    _id: messageId,
+  };
+  const body = {
+    messageDeleted: true,
+    ...(isDeleteTypeAll && {
+      $addToSet: {
+        deleteMessageFromUser: userId,
+      },
+    }),
+  };
+  // find id and add true field che
+  if (isDeleteTypeAll) {
+    body.messageDeleted = true;
+    body.messageDeletedAll = true;
+    if (!userId) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'user id required for delete for all message');
+    }
+    await messageService.updateMessage(filter, body);
+  } else {
+    await messageService.updateMessage(filter, body);
+  }
+
+  return res.status(httpStatus.OK).send({ results: 'ok' });
+});
 export const getAvailableAudioRoomForMeet = catchAsync(async (req, res) => {
   // const { isRoomTypeIsVideoCall } = req.query;
   const filter = {
@@ -105,13 +157,18 @@ export const create = catchAsync(async (req, res) => {
 
   const room = await roomService.createRoom(createRoomObj);
 
-  await userService.updateUser(
+  const getUpdatedUser = await userService.updateUser(
     { mobileNumber: body.mobileNumber },
     {
       availableForMeet: false,
     }
   );
-  return res.status(httpStatus.CREATED).send({ results: room });
+  return res.status(httpStatus.CREATED).send({
+    results: {
+      room,
+      user: getUpdatedUser,
+    },
+  });
 });
 
 export const update = catchAsync(async (req, res) => {

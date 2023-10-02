@@ -29,6 +29,18 @@ const MessageSchema = mongoose.Schema(
       type: Number,
       default: Date.now,
     },
+    messageDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    deleteMessageFromUser: {
+      type: Array,
+      ref: 'User',
+    },
+    messageDeletedAll: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );

@@ -33,7 +33,7 @@ export async function createRoom(body = {}) {
 }
 
 export async function updateRoom(filter, body, options = {}) {
-  const room = await Room.findOneAndUpdate(filter, body, options);
+  const room = await Room.findOneAndUpdate(filter, body, options).populate('users.userId').exec();
   return room;
 }
 

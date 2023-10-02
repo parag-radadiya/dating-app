@@ -19,8 +19,8 @@ export function initMeetingServerBase(server) {
     });
 
     IO.on('connection', async (socket) => {
-      console.log(socket.user, 'Connected');
-      console.log(' === variable =socket user ==> ', socket.user);
+      logger.info(` socket user connected with mobile num ${socket.user}`);
+      logger.info(`socket user ===> ${socket.user}`);
       if (socket.user) {
         await userService.updateUser(
           { mobileNumber: socket.user },
@@ -37,13 +37,26 @@ export function initMeetingServerBase(server) {
         logger.info(
           `makeCall event calleeId:${calleeId} | roomId:${roomId} | sdpOffer:${sdpOffer} | isRoomTypeIsVideoCall:${isRoomTypeIsVideoCall}`
         );
-        const room = await roomService.updateRoom({ _id: roomId }, { sdpOffer }, { new: true });
+        const room = await roomService.updateRoom(
+          { _id: roomId },
+          { sdpOffer },
+          {
+            new: true,
+            populate: {
+              path: 'users.userID',
+              model: 'User',
+            },
+          }
+        );
+
+        const user = await userService.getOne({ mobileNumber: socket.user });
         socket.to(calleeId).emit('newCall', {
           room,
           callerId: socket.user,
           sdpOffer,
           roomId,
           isRoomTypeIsVideoCall,
+          user,
         });
       });
 
@@ -206,6 +219,18 @@ export function initMeetingServerBase(server) {
         logger.info('all user of this room updated for available for live video call');
       });
     });
+
+    IO.on('disconnect', async (socket) => {
+      logger.info(` socket user connected with mobile num ${socket.user}`);
+      if (socket.user) {
+        await userService.updateUser(
+          { mobileNumber: socket.user },
+          {
+            isUserOnline: false,
+          }
+        );
+      }
+    });
   } catch (e) {
     console.log(' === error from server ===> ', e);
   }
@@ -216,5 +241,15 @@ export function initMeetingServerBase(server) {
  *  2. add active field in user table so we can check what user is active or inactive
  *  3. if user is active than we establise socket connection for both user
  *  4. user can send and recive message using socket connection and all mesaage are store in db from socket event
+ *
+ * */
+
+/*
+ *
+ *  user last massage ( give last msg data from back end side )
+ *  chat ( date and time )
+ *  online and offline
+ *  msg delete for every one and delete message from me
+ *  nickname on call from chat
  *
  * */

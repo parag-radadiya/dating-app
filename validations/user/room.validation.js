@@ -48,3 +48,21 @@ export const getMessageById = {
     otherUser: Joi.objectId().required(),
   }),
 };
+
+export const deleteMessageById = {
+  body: Joi.object().keys({
+    userId: Joi.objectId().required(),
+    isDeleteTypeAll: Joi.boolean(),
+    messageId: Joi.objectId().required(),
+  }),
+};
+
+export const getAllMessageUser = {
+  body: Joi.object().keys({
+    userId: Joi.objectId().required(),
+  }),
+};
+
+export const updateMessage = {
+  body: Joi.object().keys({}),
+};
