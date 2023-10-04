@@ -221,7 +221,7 @@ export function initMeetingServerBase(server) {
     });
 
     IO.on('disconnect', async (socket) => {
-      logger.info(` socket user connected with mobile num ${socket.user}`);
+      logger.info(` socket user disconnected with mobile num ${socket.user}`);
       if (socket.user) {
         await userService.updateUser(
           { mobileNumber: socket.user },
