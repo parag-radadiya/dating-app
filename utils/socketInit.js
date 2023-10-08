@@ -217,10 +217,11 @@ export function initMeetingServerBase(server) {
       });
 
       socket.on('socketClose', async (mobileNumber) => {
-        logger.info(` socket user disconnected with mobile num ${JSON.stringify(mobileNumber)}`);
+        logger.info(` socket user disconnected with mobile num ${JSON.stringify(mobileNumber)}
+         || ${mobileNumber.mobileNumber}`);
         if (mobileNumber) {
           await userService.updateUser(
-            { mobileNumber: parseInt(mobileNumber, 10) },
+            { mobileNumber: mobileNumber.mobileNumber },
             {
               isUserOnline: false,
             }
