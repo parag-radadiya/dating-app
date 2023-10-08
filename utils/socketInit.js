@@ -20,8 +20,8 @@ export function initMeetingServerBase(server) {
 
     IO.on('connection', async (socket) => {
       logger.info(` socket user connected with mobile num ${socket.user}`);
-      logger.info(`socket user ===> ${socket.user}`);
       if (socket.user) {
+        logger.info(`socket user ===> ${socket.user}`);
         await userService.updateUser(
           { mobileNumber: socket.user },
           {
@@ -227,7 +227,6 @@ export function initMeetingServerBase(server) {
             }
           );
         }
-        socket.close();
       });
     });
   } catch (e) {
