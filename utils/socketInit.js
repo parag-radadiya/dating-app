@@ -227,6 +227,7 @@ export function initMeetingServerBase(server) {
             }
           );
         }
+        socket.close();
       });
     });
   } catch (e) {
