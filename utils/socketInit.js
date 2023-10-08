@@ -220,7 +220,7 @@ export function initMeetingServerBase(server) {
         logger.info(` socket user disconnected with mobile num ${mobileNumber}`);
         if (mobileNumber) {
           await userService.updateUser(
-            { mobileNumber },
+            { mobileNumber: mobileNumber.toInt() },
             {
               isUserOnline: false,
             }
