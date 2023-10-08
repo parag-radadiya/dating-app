@@ -95,13 +95,10 @@ export function initMeetingServerBase(server) {
         };
         await messageService.createMessage(createMessageBody);
         // get last 100 message
-        const sendMessage = await messageService.getLastHundreadMessageList(
-          {
-            from: { $in: [getUserToSendMessage._id, getUserFromSendMessage._id] },
-            to: { $in: [getUserToSendMessage._id, getUserFromSendMessage._id] },
-          },
-          { sort: 'createdAt', limit: 100 }
-        );
+        const sendMessage = await messageService.getLastHundreadMessageList({
+          from: { $in: [getUserToSendMessage._id, getUserFromSendMessage._id] },
+          to: { $in: [getUserToSendMessage._id, getUserFromSendMessage._id] },
+        });
         socket.emit('message', {
           callee: socket.user,
           sendMessage,
@@ -218,18 +215,18 @@ export function initMeetingServerBase(server) {
         });
         logger.info('all user of this room updated for available for live video call');
       });
-    });
 
-    IO.on('socketClose', async (mobileNumber) => {
-      logger.info(` socket user disconnected with mobile num ${mobileNumber}`);
-      if (mobileNumber) {
-        await userService.updateUser(
-          { mobileNumber },
-          {
-            isUserOnline: false,
-          }
-        );
-      }
+      socket.on('socketClose', async (mobileNumber) => {
+        logger.info(` socket user disconnected with mobile num ${mobileNumber}`);
+        if (mobileNumber) {
+          await userService.updateUser(
+            { mobileNumber },
+            {
+              isUserOnline: false,
+            }
+          );
+        }
+      });
     });
   } catch (e) {
     console.log(' === error from server ===> ', e);

@@ -11,7 +11,7 @@ export async function getOne(query, options = {}) {
 }
 
 export async function getLastHundreadMessageList(filter, options = {}) {
-  const message = await Message.find(filter, options.projection, options).sort({ createdAt: 1 }).limit(100);
+  const message = await Message.find(filter, options.projection, options).sort({ createdAt: -1 }).limit(100);
   return message;
 }
 
