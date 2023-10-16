@@ -2,24 +2,28 @@ import httpStatus from 'http-status';
 import { logger } from '../config/logger';
 import { messageService, roomService, userService } from '../services';
 import ApiError from './ApiError';
+// import WebSocket from "ws";
+const WebSocket = require('ws');
 
 // eslint-disable-next-line import/prefer-default-export
 export function initMeetingServerBase(server) {
   try {
     // eslint-disable-next-line global-require
-    const IO = require('socket.io')(server);
+    // const IO = require('socket.io')(server);
+    const wss = new WebSocket.Server({ server });
 
-    IO.use((socket, next) => {
-      if (socket.handshake.query) {
-        const { callerId } = socket.handshake.query;
-        // eslint-disable-next-line
-        socket.user = callerId;
-        next();
-      }
-    });
+    // console.log(' === variable === > ', IO);
+    // wss.use((socket, next) => {
+    //   if (socket.handshake.query) {
+    //     const { callerId } = socket.handshake.query;
+    //     // eslint-disable-next-line
+    //     socket.user = callerId;
+    //     next();
+    //   }
+    // });
 
-    IO.on('connection', async (socket) => {
-      logger.info(` socket user connected with mobile num ${socket.user}`);
+    wss.on('connection', async (socket) => {
+      logger.info(` socket user connected with mobile num ${socket}`);
       if (socket.user) {
         logger.info(`socket user ===> ${socket.user}`);
         await userService.updateUser(
@@ -44,7 +48,7 @@ export function initMeetingServerBase(server) {
       });
 
       // todo : set user active in user table
-      socket.join(socket.user);
+      // socket.join(socket.user);
 
       socket.on('makeCall', async (data) => {
         const { calleeId, roomId, sdpOffer, isRoomTypeIsVideoCall } = data;
@@ -131,16 +135,17 @@ export function initMeetingServerBase(server) {
         logger.info(`answerCall event callerId:${callerId} | roomId:${roomId} | mobileNumber:${mobileNumber}`);
         const room = await roomService.getRoomById(roomId);
         if (!room) {
-          throw new ApiError(httpStatus.BAD_REQUEST, 'no room found with this id');
+          // throw new ApiError(httpStatus.BAD_REQUEST, 'no room found with this id');
         }
         const user = await userService.getOne({ mobileNumber });
         if (!user) {
-          throw new ApiError(httpStatus.BAD_REQUEST, 'no user found with this id');
+          // throw new ApiError(httpStatus.BAD_REQUEST, 'no user found with this id');
         }
 
         if (room.isRoomTypeIsVideoCall) {
           // we have to check available member in call and if available member is more the two then use can not join this video call
           if (room.users.length >= 2) {
+            // todo : need to handle error here
             throw new ApiError(httpStatus.BAD_REQUEST, 'video call has already two user. please join another call');
           }
           // we have to make function for join user in meeting. currently we are doing code in below
@@ -150,24 +155,31 @@ export function initMeetingServerBase(server) {
         // eslint-disable-next-line eqeqeq
         const result = room.users.find((userData) => user.id.toString() == userData.userId && !user.userCallEndTime);
 
-        if (result) {
-          throw new Error('user already part of meet');
+        if (!result) {
+          logger.info('user already part of meet');
+          // throw new Error('user already part of meet');
+          await roomService.updateRoom(
+            { _id: roomId },
+            {
+              roomStartTime: Date.now(),
+              $addToSet: {
+                users: {
+                  userId: user.id,
+                  userCallStartTime: Date.now(),
+                  mobileNumber: user.mobileNumber,
+                },
+              },
+            },
+            {
+              new: true,
+              populate: {
+                path: 'users.userID',
+                model: 'User',
+              },
+            }
+          );
         }
 
-        await roomService.updateRoom(
-          { _id: roomId },
-          {
-            roomStartTime: Date.now(),
-            $addToSet: { users: { userId: user.id, userCallStartTime: Date.now(), mobileNumber: user.mobileNumber } },
-          },
-          {
-            new: true,
-            populate: {
-              path: 'users.userID',
-              model: 'User',
-            },
-          }
-        );
         await userService.updateUser(
           { mobileNumber },
           {

@@ -37,6 +37,7 @@
     "express-winston": "^4.2.0",
     "firebase-admin": "^9.10.0",
     "helmet": "^3.21.2",
+    "http": "^0.0.1-security",
     "http-status": "^1.5.0",
     "ioredis": "^4.26.0",
     "jimp": "^0.16.1",
@@ -73,6 +74,7 @@
     "swagger-ui-express": "^4.1.6",
     "twilio": "^4.16.0",
     "winston": "^3.2.1",
+    "ws": "^8.14.2",
     "xss-clean": "^0.1.1",
     "yamljs": "^0.3.0"
   },

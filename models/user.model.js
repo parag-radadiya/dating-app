@@ -145,6 +145,9 @@ const UserSchema = new mongoose.Schema({
   githubProvider: {
     type: OauthSchema,
   },
+  coin: {
+    type: Number,
+  },
 });
 UserSchema.plugin(toJSON);
 UserSchema.plugin(mongoosePaginateV2);

@@ -7,6 +7,12 @@ const EnumRoleOfUser = {
   ADMIN: 'admin',
   TRAINER: 'trainer',
 };
+
+const EnumTransactionType = {
+  CREDIT: 'credit',
+  DEBIT: 'debit',
+};
+
 const EnumPlatformOfDeviceToken = {
   ANDROID: 'android',
   IOS: 'ios',
@@ -43,4 +49,5 @@ module.exports = {
   EnumPlatformOfDeviceToken,
   EnumTypeOfToken,
   MeetingPayloadEnum,
+  EnumTransactionType,
 };
