@@ -3,26 +3,26 @@ import { logger } from '../config/logger';
 import { messageService, roomService, userService } from '../services';
 import ApiError from './ApiError';
 // import WebSocket from "ws";
-const WebSocket = require('ws');
+// const WebSocket = require('ws');
 
 // eslint-disable-next-line import/prefer-default-export
 export function initMeetingServerBase(server) {
   try {
     // eslint-disable-next-line global-require
-    // const IO = require('socket.io')(server);
-    const wss = new WebSocket.Server({ server });
+    const IO = require('socket.io')(server);
+    // const wss = new WebSocket.Server({ server });
 
     // console.log(' === variable === > ', IO);
-    // wss.use((socket, next) => {
-    //   if (socket.handshake.query) {
-    //     const { callerId } = socket.handshake.query;
-    //     // eslint-disable-next-line
-    //     socket.user = callerId;
-    //     next();
-    //   }
-    // });
+    IO.use((socket, next) => {
+      if (socket.handshake.query) {
+        const { callerId } = socket.handshake.query;
+        // eslint-disable-next-line
+        socket.user = callerId;
+        next();
+      }
+    });
 
-    wss.on('connection', async (socket) => {
+    IO.on('connection', async (socket) => {
       logger.info(` socket user connected with mobile num ${socket}`);
       if (socket.user) {
         logger.info(`socket user ===> ${socket.user}`);
