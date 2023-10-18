@@ -35,7 +35,7 @@ export function initMeetingServerBase(server) {
       }
 
       socket.on('socketUserOnline', async (mobileNumber) => {
-        logger.info(` socket user online with mobile num ${JSON.stringify(mobileNumber)}
+        logger.info(` socket user online with mobile num ${JSON.stringify(mobileNumber.mobileNumber)}
          || ${mobileNumber.mobileNumber}`);
         if (mobileNumber) {
           await userService.updateUser(
