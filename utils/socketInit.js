@@ -1,9 +1,31 @@
 import httpStatus from 'http-status';
+import { Transaction } from 'models';
 import { logger } from '../config/logger';
 import { messageService, roomService, userService } from '../services';
 import ApiError from './ApiError';
+import { EnumTransactionType } from '../models/enum.model';
+
 // import WebSocket from "ws";
 // const WebSocket = require('ws');
+
+async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
+  // userIds.map()
+  const getAvailableCoinAmountFromUser = await userService.getUserById({ _id: senderUserId.userId });
+  await userService.updateUser(
+    { _id: senderUserId.userId },
+    {
+      coinAmount: getAvailableCoinAmountFromUser - coinAmount,
+    }
+  );
+
+  const getAvailableCoinAmountFromReceiver = await userService.getUserById({ _id: receiverUserId.userId });
+  await userService.updateUser(
+    { _id: receiverUserId.userId },
+    {
+      coinAmount: getAvailableCoinAmountFromReceiver + coinAmount,
+    }
+  );
+}
 
 // eslint-disable-next-line import/prefer-default-export
 export function initMeetingServerBase(server) {
@@ -51,13 +73,13 @@ export function initMeetingServerBase(server) {
       socket.join(socket.user);
 
       socket.on('makeCall', async (data) => {
-        const { calleeId, roomId, sdpOffer, isRoomTypeIsVideoCall } = data;
+        const { calleeId, roomId, sdpOffer, isRoomTypeIsVideoCall, userId } = data;
         logger.info(
           `makeCall event calleeId:${calleeId} | roomId:${roomId} | sdpOffer:${sdpOffer} | isRoomTypeIsVideoCall:${isRoomTypeIsVideoCall}`
         );
         const room = await roomService.updateRoom(
           { _id: roomId },
-          { sdpOffer },
+          { sdpOffer, userIdThatStartCall: userId },
           {
             new: true,
             populate: {
@@ -226,7 +248,8 @@ export function initMeetingServerBase(server) {
       });
 
       socket.on('endMeeting', async (data) => {
-        const { callerId, roomId } = data;
+        // userSpendTimeInTime  =>  time in sec
+        const { callerId, roomId, userSpendTimeInTime, userId } = data;
         logger.info(`socket end meeting for roomId = ${roomId} and caller id ${callerId}`);
         socket.to(callerId).emit('userEndedMeeting', {
           callee: socket.user,
@@ -246,6 +269,50 @@ export function initMeetingServerBase(server) {
               availableForMeet: true,
             }
           );
+        });
+
+        // todo : below comment
+        // we have to deduct coin from one user and add it into another user.
+        // call transaction model and update transaction in that
+
+        // calculate coin amount based on time ,
+        // currently we calculate based on per sec one coin,
+        // letter we add into user that how much user want to take.
+        // userSpendTimeInTime
+
+        const coinAmount = userSpendTimeInTime;
+        logger.info(`roomId:${roomId} coinAmount:${coinAmount}`);
+
+        const otherUserId = room.users.find((userData) => userData.userId !== room.userIdThatStartCall);
+        logger.info(`roomId:${roomId} otherUserId:${otherUserId}`);
+
+        const transactionBody = {
+          receiverUserId: room.userIdThatStartCall,
+          coinAmount,
+          senderUserId: otherUserId.userId,
+          transactionType: EnumTransactionType.CALL_AMOUNT,
+          createdBy: userId,
+          updatedBy: userId,
+        };
+
+        logger.info(`roomId:${roomId} transactionBody:${transactionBody}`);
+
+        const addTransaction = await Transaction.create(transactionBody);
+
+        logger.info(`roomId:${roomId} addTransaction:${addTransaction}`);
+
+        // update coin in both user  ( cut coin from one user and add into another user )
+        await updateUserCoin(otherUserId.userId, room.userIdThatStartCall, coinAmount);
+
+        // make event for updated coin ( this two user coin has update ( userid  => fetch both user and get update user ))
+        socket.to(callerId).emit('coinUpdated', {
+          callee: socket.user,
+          callerId: data.callerId,
+        });
+
+        socket.to(otherUserId.mobileNumber).emit('coinUpdated', {
+          callee: socket.user,
+          callerId: data.callerId,
         });
         logger.info('all user of this room updated for available for live video call');
       });

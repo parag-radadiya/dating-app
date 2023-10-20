@@ -55,6 +55,10 @@ const RoomSchema = new mongoose.Schema(
     roomEndTime: {
       type: Date,
     },
+    userIdThatStartCall: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );

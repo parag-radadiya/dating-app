@@ -11,6 +11,7 @@ const EnumRoleOfUser = {
 const EnumTransactionType = {
   CREDIT: 'credit',
   DEBIT: 'debit',
+  CALL_AMOUNT: 'call_amount',
 };
 
 const EnumPlatformOfDeviceToken = {

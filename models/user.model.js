@@ -89,6 +89,7 @@ const UserSchema = new mongoose.Schema({
    * */
   codes: {
     type: [CodeSchema],
+    private: true,
   },
   /**
    * password for authentication
