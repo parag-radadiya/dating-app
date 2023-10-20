@@ -14,7 +14,7 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   await userService.updateUser(
     { _id: senderUserId },
     {
-      coin: getAvailableCoinAmountFromUser - coinAmount,
+      coin: getAvailableCoinAmountFromUser.coin ? getAvailableCoinAmountFromUser.coin - coinAmount : 0,
     }
   );
 
@@ -22,7 +22,7 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   await userService.updateUser(
     { _id: receiverUserId },
     {
-      coin: getAvailableCoinAmountFromReceiver + coinAmount,
+      coin: getAvailableCoinAmountFromReceiver.coin ? getAvailableCoinAmountFromReceiver.coin + coinAmount : 0,
     }
   );
 }
