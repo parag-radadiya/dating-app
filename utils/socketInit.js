@@ -262,10 +262,10 @@ export function initMeetingServerBase(server) {
         // userSpendTimeInTime  =>  time in sec
         const { callerId, roomId, userSpendTimeInTime, userId } = data;
         logger.info(`socket end meeting for roomId = ${roomId} and caller id ${callerId}`);
-        socket.to(callerId).emit('userEndedMeeting', {
-          callee: socket.user,
-          callerId: data.callerId,
-        });
+        // socket.to(callerId).emit('userEndedMeeting', {
+        //   callee: socket.user,
+        //   callerId: data.callerId,
+        // });
         const room = await roomService.updateRoom(
           { _id: roomId },
           {
@@ -323,10 +323,16 @@ export function initMeetingServerBase(server) {
 
         console.log(' === otherUserId.mobileNumber === > ', otherUserId.mobileNumber);
 
-        socket.to(otherUserId.mobileNumber).emit('coinUpdated', {
+        // socket.to(otherUserId.mobileNumber).emit('coinUpdated', {
+        //   callee: socket.user,
+        //   callerId: data.callerId,
+        // });
+
+        socket.to(callerId).emit('userEndedMeeting', {
           callee: socket.user,
           callerId: data.callerId,
         });
+
         logger.info('all user of this room updated for available for live video call');
       });
 
