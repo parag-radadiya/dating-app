@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import { Transaction } from 'models';
+import { Transaction, User } from 'models';
 import { logger } from '../config/logger';
 import { messageService, roomService, userService } from '../services';
 import ApiError from './ApiError';
@@ -16,7 +16,14 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   logger.info(`getAvailableCoinAmountFromUser:${getAvailableCoinAmountFromUser}`);
 
   const updatedCoin = getAvailableCoinAmountFromUser.coin ? getAvailableCoinAmountFromUser.coin - coinAmount : 0;
-  const user = await userService.updateUser(
+  //     await userService.updateUser(
+  //   { _id: senderUserId },
+  //   {
+  //     coin: updatedCoin,
+  //   }
+  // );
+
+  const user = await User.findOneAndUpdate(
     { _id: senderUserId },
     {
       coin: updatedCoin,
@@ -326,10 +333,10 @@ export function initMeetingServerBase(server) {
 
         console.log(' === otherUserId.mobileNumber === > ', otherUserId.mobileNumber);
 
-        // socket.to(otherUserId.mobileNumber).emit('coinUpdated', {
-        //   callee: socket.user,
-        //   callerId: data.callerId,
-        // });
+        socket.to(otherUserId.mobileNumber).emit('coinUpdated', {
+          callee: socket.user,
+          callerId: data.callerId,
+        });
 
         socket.to(callerId).emit('userEndedMeeting', {
           callee: socket.user,
