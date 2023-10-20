@@ -9,8 +9,12 @@ import { EnumTransactionType } from '../models/enum.model';
 // const WebSocket = require('ws');
 
 async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
+  logger.info(`senderUserId:${senderUserId}  receiverUserId:${receiverUserId} coinAmount:${coinAmount}`);
+
   // userIds.map()
   const getAvailableCoinAmountFromUser = await userService.getUserById({ _id: senderUserId });
+  logger.info(`getAvailableCoinAmountFromUser:${getAvailableCoinAmountFromUser}`);
+
   await userService.updateUser(
     { _id: senderUserId },
     {
@@ -18,7 +22,14 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
     }
   );
 
+  console.log(
+    ' === coin === > ',
+    getAvailableCoinAmountFromUser.coin ? getAvailableCoinAmountFromUser.coin - coinAmount : 0
+  );
   const getAvailableCoinAmountFromReceiver = await userService.getUserById({ _id: receiverUserId });
+
+  logger.info(`getAvailableCoinAmountFromUser:${getAvailableCoinAmountFromUser}`);
+
   await userService.updateUser(
     { _id: receiverUserId },
     {
