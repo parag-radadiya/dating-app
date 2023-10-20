@@ -48,7 +48,7 @@ export function initMeetingServerBase(server) {
       });
 
       // todo : set user active in user table
-      // socket.join(socket.user);
+      socket.join(socket.user);
 
       socket.on('makeCall', async (data) => {
         const { calleeId, roomId, sdpOffer, isRoomTypeIsVideoCall } = data;
@@ -68,6 +68,9 @@ export function initMeetingServerBase(server) {
         );
 
         const user = await userService.getOne({ mobileNumber: socket.user });
+
+        console.log(' === calleeId === > ', calleeId);
+
         socket.to(calleeId).emit('newCall', {
           room,
           callerId: socket.user,
@@ -76,6 +79,8 @@ export function initMeetingServerBase(server) {
           isRoomTypeIsVideoCall,
           user,
         });
+
+        console.log(' === variable === > newCall event emitted ');
       });
 
       socket.on('join-another-user', async (data) => {
@@ -91,6 +96,8 @@ export function initMeetingServerBase(server) {
           ongoingCall: true,
         });
       });
+
+      // socket.on('', async ( ) => {})
 
       socket.on('sendMessage', async (data) => {
         const { callerId, mobileNumber } = data;
@@ -200,6 +207,7 @@ export function initMeetingServerBase(server) {
         const { callerId, emojiData } = data;
         logger.info(`sendEmojiToTrainer event callerId:${callerId} `);
 
+        // todo:
         socket.to(callerId).emit('sendEmojiToTrainerSide', {
           callee: socket.user,
           emojiData,
