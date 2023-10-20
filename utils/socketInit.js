@@ -15,12 +15,15 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   const getAvailableCoinAmountFromUser = await userService.getUserById({ _id: senderUserId });
   logger.info(`getAvailableCoinAmountFromUser:${getAvailableCoinAmountFromUser}`);
 
-  await userService.updateUser(
+  const updatedCoin = getAvailableCoinAmountFromUser.coin ? getAvailableCoinAmountFromUser.coin - coinAmount : 0;
+  const user = await userService.updateUser(
     { _id: senderUserId },
     {
-      coin: getAvailableCoinAmountFromUser.coin ? getAvailableCoinAmountFromUser.coin - coinAmount : 0,
+      coin: updatedCoin,
     }
   );
+
+  console.log(' === user  === > ', user);
 
   console.log(
     ' === coin === > ',
