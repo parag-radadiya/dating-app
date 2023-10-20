@@ -289,7 +289,7 @@ export function initMeetingServerBase(server) {
         const transactionBody = {
           receiverUserId: room.userIdThatStartCall,
           coinAmount,
-          senderUserId: otherUserId.userId,
+          senderUserId: otherUserId.userId._id,
           transactionType: EnumTransactionType.CALL_AMOUNT,
           createdBy: userId,
           updatedBy: userId,
@@ -302,7 +302,7 @@ export function initMeetingServerBase(server) {
         logger.info(`roomId:${roomId} addTransaction:${addTransaction}`);
 
         // update coin in both user  ( cut coin from one user and add into another user )
-        await updateUserCoin(otherUserId.userId, room.userIdThatStartCall, coinAmount);
+        await updateUserCoin(otherUserId.userId._id, room.userIdThatStartCall, coinAmount);
 
         // make event for updated coin ( this two user coin has update ( userid  => fetch both user and get update user ))
         socket.to(callerId).emit('coinUpdated', {
