@@ -10,17 +10,17 @@ import { EnumTransactionType } from '../models/enum.model';
 
 async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   // userIds.map()
-  const getAvailableCoinAmountFromUser = await userService.getUserById({ _id: senderUserId.userId });
+  const getAvailableCoinAmountFromUser = await userService.getUserById({ _id: senderUserId });
   await userService.updateUser(
-    { _id: senderUserId.userId },
+    { _id: senderUserId },
     {
       coinAmount: getAvailableCoinAmountFromUser - coinAmount,
     }
   );
 
-  const getAvailableCoinAmountFromReceiver = await userService.getUserById({ _id: receiverUserId.userId });
+  const getAvailableCoinAmountFromReceiver = await userService.getUserById({ _id: receiverUserId });
   await userService.updateUser(
-    { _id: receiverUserId.userId },
+    { _id: receiverUserId },
     {
       coinAmount: getAvailableCoinAmountFromReceiver + coinAmount,
     }
