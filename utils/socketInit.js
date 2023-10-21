@@ -295,6 +295,13 @@ export function initMeetingServerBase(server) {
         const coinAmount = userSpendTimeInTime;
         logger.info(`roomId:${roomId} coinAmount:${coinAmount} || userIdThatStartCall:${room.userIdThatStartCall}`);
 
+        console.log(' === room.users === > ', room.users);
+
+        // eslint-disable-next-line
+        room.users.map((item) => {
+          console.log(' === item === > ', item);
+        });
+
         const otherUserId = room.users.find((userData) => userData.userId._id.toString() !== room.userIdThatStartCall);
         logger.info(`roomId:${roomId} otherUserId:${otherUserId}`);
 
