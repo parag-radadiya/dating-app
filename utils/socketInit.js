@@ -293,15 +293,15 @@ export function initMeetingServerBase(server) {
         // userSpendTimeInTime
 
         const coinAmount = userSpendTimeInTime;
-        logger.info(`roomId:${roomId} coinAmount:${coinAmount}`);
+        logger.info(`roomId:${roomId} coinAmount:${coinAmount} || userIdThatStartCall:${room.userIdThatStartCall}`);
 
         const otherUserId = room.users.find((userData) => userData.userId !== room.userIdThatStartCall);
         logger.info(`roomId:${roomId} otherUserId:${otherUserId}`);
 
         const transactionBody = {
-          receiverUserId: room.userIdThatStartCall,
+          receiverUserId: otherUserId.userId._id,
           coinAmount,
-          senderUserId: otherUserId.userId._id,
+          senderUserId: room.userIdThatStartCall,
           transactionType: EnumTransactionType.CALL_AMOUNT,
           createdBy: userId,
           updatedBy: userId,
