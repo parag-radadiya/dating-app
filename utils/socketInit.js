@@ -12,7 +12,7 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   logger.info(`senderUserId:${senderUserId}  receiverUserId:${receiverUserId} coinAmount:${coinAmount}`);
 
   // userIds.map()
-  let getAvailableCoinAmountFromUser = await userService.getUserById({ _id: senderUserId });
+  const getAvailableCoinAmountFromUser = await userService.getUserById({ _id: senderUserId });
   logger.info(`getAvailableCoinAmountFromUser:${getAvailableCoinAmountFromUser}`);
 
   const updatedCoin = getAvailableCoinAmountFromUser.coin ? getAvailableCoinAmountFromUser.coin - coinAmount : 0;
@@ -21,22 +21,22 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   }).exec();
   logger.info(`user:${user} || coin:${updatedCoin}`);
 
-  getAvailableCoinAmountFromUser = await userService.getUserById({ _id: receiverUserId });
+  // getAvailableCoinAmountFromUser = await userService.getUserById({ _id: receiverUserId });
 
-  logger.info(`getAvailableCoinAmountFromUser:${getAvailableCoinAmountFromUser}`);
-  const updatedCoinForReceiverEnd = getAvailableCoinAmountFromUser.coin
-    ? getAvailableCoinAmountFromUser.coin - coinAmount
-    : 0;
-  // await userService.updateUser(
-  //   { _id: receiverUserId },
-  //   {
-  //     coin:updatedCoinForReceiverEnd,
-  //   }
-  // );
-  const receiverUser = await User.findByIdAndUpdate(receiverUserId, {
-    coin: updatedCoinForReceiverEnd,
-  }).exec();
-  logger.info(`receiverUser:${receiverUser} || updatedCoinForReceiverEnd:${updatedCoinForReceiverEnd}`);
+  // logger.info(`getAvailableCoinAmountFromUser:${getAvailableCoinAmountFromUser}`);
+  // const updatedCoinForReceiverEnd = getAvailableCoinAmountFromUser.coin
+  //   ? getAvailableCoinAmountFromUser.coin - coinAmount
+  //   : 0;
+  // // await userService.updateUser(
+  // //   { _id: receiverUserId },
+  // //   {
+  // //     coin:updatedCoinForReceiverEnd,
+  // //   }
+  // // );
+  // const receiverUser = await User.findByIdAndUpdate(receiverUserId, {
+  //   coin: updatedCoinForReceiverEnd,
+  // }).exec();
+  // logger.info(`receiverUser:${receiverUser} || updatedCoinForReceiverEnd:${updatedCoinForReceiverEnd}`);
 }
 
 // eslint-disable-next-line import/prefer-default-export
@@ -302,7 +302,7 @@ export function initMeetingServerBase(server) {
           console.log(' === item === > ', item);
         });
 
-        const otherUserId = room.users.find((userData) => userData.userId._id.toString() !== room.userIdThatStartCall);
+        const otherUserId = room.users.find((userData) => userData.userId._id !== room.userIdThatStartCall);
         logger.info(`roomId:${roomId} otherUserId:${otherUserId}`);
 
         const transactionBody = {
@@ -321,7 +321,7 @@ export function initMeetingServerBase(server) {
         logger.info(`roomId:${roomId} addTransaction:${addTransaction}`);
 
         // update coin in both user  ( cut coin from one user and add into another user )
-        await updateUserCoin(otherUserId.userId._id, room.userIdThatStartCall, coinAmount);
+        await updateUserCoin(room.userIdThatStartCall, otherUserId.userId._id, coinAmount);
 
         // make event for updated coin ( this two user coin has update ( userid  => fetch both user and get update user ))
         socket.to(callerId).emit('coinUpdated', {
