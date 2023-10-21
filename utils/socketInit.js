@@ -295,7 +295,7 @@ export function initMeetingServerBase(server) {
         const coinAmount = userSpendTimeInTime;
         logger.info(`roomId:${roomId} coinAmount:${coinAmount} || userIdThatStartCall:${room.userIdThatStartCall}`);
 
-        const otherUserId = room.users.find((userData) => userData.userId.toString() !== room.userIdThatStartCall);
+        const otherUserId = room.users.find((userData) => userData.userId._id.toString() !== room.userIdThatStartCall);
         logger.info(`roomId:${roomId} otherUserId:${otherUserId}`);
 
         const transactionBody = {
