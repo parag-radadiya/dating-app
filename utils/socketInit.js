@@ -12,38 +12,33 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   logger.info(`senderUserId:${senderUserId}  receiverUserId:${receiverUserId} coinAmount:${coinAmount}`);
 
   // userIds.map()
-  const getAvailableCoinAmountFromUser = await userService.getUserById({ _id: senderUserId });
+  let getAvailableCoinAmountFromUser = await userService.getUserById({ _id: senderUserId });
   logger.info(`getAvailableCoinAmountFromUser:${getAvailableCoinAmountFromUser}`);
 
   const updatedCoin = getAvailableCoinAmountFromUser.coin ? getAvailableCoinAmountFromUser.coin - coinAmount : 0;
-  //     await userService.updateUser(
-  //   { _id: senderUserId },
-  //   {
-  //     coin: updatedCoin,
-  //   }
-  // );
-
   const user = await User.findByIdAndUpdate(senderUserId, {
     coin: updatedCoin,
     nickName: 'yo yo yo',
   }).exec();
+  logger.info(`user:${user} || coin:${updatedCoin}`);
 
-  console.log(' === user  === > ', user);
-
-  console.log(
-    ' === coin === > ',
-    getAvailableCoinAmountFromUser.coin ? getAvailableCoinAmountFromUser.coin - coinAmount : 0
-  );
-  const getAvailableCoinAmountFromReceiver = await userService.getUserById({ _id: receiverUserId });
+  getAvailableCoinAmountFromUser = await userService.getUserById({ _id: receiverUserId });
 
   logger.info(`getAvailableCoinAmountFromUser:${getAvailableCoinAmountFromUser}`);
-
-  await userService.updateUser(
-    { _id: receiverUserId },
-    {
-      coin: getAvailableCoinAmountFromReceiver.coin ? getAvailableCoinAmountFromReceiver.coin + coinAmount : 0,
-    }
-  );
+  const updatedCoinForReceiverEnd = getAvailableCoinAmountFromUser.coin
+    ? getAvailableCoinAmountFromUser.coin - coinAmount
+    : 0;
+  // await userService.updateUser(
+  //   { _id: receiverUserId },
+  //   {
+  //     coin:updatedCoinForReceiverEnd,
+  //   }
+  // );
+  const receiverUser = await User.findByIdAndUpdate(senderUserId, {
+    coin: updatedCoinForReceiverEnd,
+    nickName: 'yo yo yo yup',
+  }).exec();
+  logger.info(`receiverUser:${receiverUser} || updatedCoinForReceiverEnd:${updatedCoinForReceiverEnd}`);
 }
 
 // eslint-disable-next-line import/prefer-default-export
