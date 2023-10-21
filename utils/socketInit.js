@@ -18,7 +18,6 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   const updatedCoin = getAvailableCoinAmountFromUser.coin ? getAvailableCoinAmountFromUser.coin - coinAmount : 0;
   const user = await User.findByIdAndUpdate(senderUserId, {
     coin: updatedCoin,
-    nickName: 'yo yo yo',
   }).exec();
   logger.info(`user:${user} || coin:${updatedCoin}`);
 
@@ -36,7 +35,6 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   // );
   const receiverUser = await User.findByIdAndUpdate(receiverUserId, {
     coin: updatedCoinForReceiverEnd,
-    nickName: 'yo yo yo yup',
   }).exec();
   logger.info(`receiverUser:${receiverUser} || updatedCoinForReceiverEnd:${updatedCoinForReceiverEnd}`);
 }
