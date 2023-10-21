@@ -23,12 +23,10 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   //   }
   // );
 
-  const user = await User.findOneAndUpdate(
-    { _id: senderUserId },
-    {
-      coin: updatedCoin,
-    }
-  );
+  const user = await User.findByIdAndUpdate(senderUserId, {
+    coin: updatedCoin,
+    nickName: 'yo yo yo',
+  }).exec();
 
   console.log(' === user  === > ', user);
 
