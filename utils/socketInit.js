@@ -34,7 +34,7 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   //     coin:updatedCoinForReceiverEnd,
   //   }
   // );
-  const receiverUser = await User.findByIdAndUpdate(senderUserId, {
+  const receiverUser = await User.findByIdAndUpdate(receiverUserId, {
     coin: updatedCoinForReceiverEnd,
     nickName: 'yo yo yo yup',
   }).exec();
