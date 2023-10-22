@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import enumFields from '../../models/enum.model';
 
 Joi.objectId = require('joi-objectid')(Joi);
 
@@ -7,6 +8,7 @@ export const createRoom = {
   body: Joi.object().keys({
     mobileNumber: Joi.number().required(),
     isRoomTypeIsVideoCall: Joi.boolean().required(),
+    roomType: Joi.string().valid(...Object.values(enumFields.EnumRoomType)),
   }),
 };
 

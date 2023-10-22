@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import mongoosePaginateV2 from 'mongoose-paginate-v2';
 import { toJSON, softDelete } from './plugins';
+import enumModel from './enum.model';
 
 const roomUserSchema = new mongoose.Schema({
   userId: {
@@ -54,6 +55,10 @@ const RoomSchema = new mongoose.Schema(
     },
     roomEndTime: {
       type: Date,
+    },
+    roomType: {
+      type: String,
+      enum: Object.values(enumModel.EnumRoomType),
     },
     userIdThatStartCall: {
       type: mongoose.Schema.Types.ObjectId,

@@ -14,6 +14,11 @@ const EnumTransactionType = {
   CALL_AMOUNT: 'call_amount',
 };
 
+const EnumRoomType = {
+  TRAINER: 'trainer',
+  CHAT: 'chat',
+};
+
 const EnumPlatformOfDeviceToken = {
   ANDROID: 'android',
   IOS: 'ios',
@@ -51,4 +56,5 @@ module.exports = {
   EnumTypeOfToken,
   MeetingPayloadEnum,
   EnumTransactionType,
+  EnumRoomType,
 };

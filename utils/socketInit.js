@@ -3,11 +3,12 @@ import { Transaction, User } from 'models';
 import { logger } from '../config/logger';
 import { messageService, roomService, userService } from '../services';
 import ApiError from './ApiError';
-import { EnumTransactionType } from '../models/enum.model';
+import { EnumRoomType, EnumTransactionType } from '../models/enum.model';
 
 // import WebSocket from "ws";
 // const WebSocket = require('ws');
 
+// eslint-disable-next-line
 async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   logger.info(`senderUserId:${senderUserId}  receiverUserId:${receiverUserId} coinAmount:${coinAmount}`);
 
@@ -37,6 +38,16 @@ async function updateUserCoin(senderUserId, receiverUserId, coinAmount) {
   //   coin: updatedCoinForReceiverEnd,
   // }).exec();
   // logger.info(`receiverUser:${receiverUser} || updatedCoinForReceiverEnd:${updatedCoinForReceiverEnd}`);
+}
+
+async function updateCoinInUser(updatedCoin, user) {
+  logger.info(`updatedCoin:${updatedCoin} ||  user:${user} updateCoinInUser event `);
+
+  const coin = user.coin ? user.coin - updatedCoin : 0;
+  await User.findByIdAndUpdate(user._id, {
+    coin,
+  }).exec();
+  logger.info(`user:${user} || coin:${updatedCoin}`);
 }
 
 // eslint-disable-next-line import/prefer-default-export
@@ -261,7 +272,7 @@ export function initMeetingServerBase(server) {
 
       socket.on('endMeeting', async (data) => {
         // userSpendTimeInTime  =>  time in sec
-        const { callerId, roomId, userSpendTimeInTime, userId } = data;
+        const { callerId, roomId, userSpendTimeInTime, userId, userIdThatStartCall, secondUserId } = data;
         logger.info(`socket end meeting for roomId = ${roomId} and caller id ${callerId}`);
         // socket.to(callerId).emit('userEndedMeeting', {
         //   callee: socket.user,
@@ -292,46 +303,62 @@ export function initMeetingServerBase(server) {
         // letter we add into user that how much user want to take.
         // userSpendTimeInTime
 
-        const coinAmount = userSpendTimeInTime;
-        logger.info(`roomId:${roomId} coinAmount:${coinAmount} || userIdThatStartCall:${room.userIdThatStartCall}`);
+        if (secondUserId) {
+          const coinAmount = userSpendTimeInTime;
+          logger.info(`roomId:${roomId} coinAmount:${coinAmount} || userIdThatStartCall:${room.userIdThatStartCall}`);
 
-        console.log(' === room.users === > ', room.users);
+          const otherUserId = room.users.find((userData) => userData.userId._id !== room.userIdThatStartCall);
+          logger.info(`roomId:${roomId} otherUserId:${otherUserId}`);
 
-        // eslint-disable-next-line
-        room.users.map((item) => {
-          console.log(' === item === > ', item);
-        });
+          const transactionBody = {
+            receiverUserId: otherUserId.userId._id,
+            coinAmount,
+            senderUserId: room.userIdThatStartCall,
+            transactionType: EnumTransactionType.CALL_AMOUNT,
+            createdBy: userId,
+            updatedBy: userId,
+          };
 
-        const otherUserId = room.users.find((userData) => userData.userId._id !== room.userIdThatStartCall);
-        logger.info(`roomId:${roomId} otherUserId:${otherUserId}`);
+          logger.info(`roomId:${roomId} transactionBody:${transactionBody}`);
 
-        const transactionBody = {
-          receiverUserId: otherUserId.userId._id,
-          coinAmount,
-          senderUserId: room.userIdThatStartCall,
-          transactionType: EnumTransactionType.CALL_AMOUNT,
-          createdBy: userId,
-          updatedBy: userId,
-        };
+          const addTransaction = await Transaction.create(transactionBody);
 
-        logger.info(`roomId:${roomId} transactionBody:${transactionBody}`);
+          logger.info(`roomId:${roomId} addTransaction:${addTransaction}`);
 
-        const addTransaction = await Transaction.create(transactionBody);
+          // update coin in both user  ( cut coin from one user and add into another user )
 
-        logger.info(`roomId:${roomId} addTransaction:${addTransaction}`);
+          // user => male || female
+          // chat => male => cut money
+          // trainer => male join => cut money.
+          // we have to send amount and user id for cut amount from only one user side.
+          // roomType
+          if (room.roomType === EnumRoomType.CHAT) {
+            const getUser = await userService.getUserById(userIdThatStartCall);
+            logger.info(`roomType:${room.roomType} || gender:${getUser.gender} `);
 
-        // update coin in both user  ( cut coin from one user and add into another user )
-        await updateUserCoin(room.userIdThatStartCall, otherUserId.userId._id, coinAmount);
+            if (getUser.gender === 'male') {
+              await updateCoinInUser(coinAmount, getUser);
+            }
+          }
+          if (room.roomType === EnumRoomType.TRAINER) {
+            const getUser = await userService.getUserById(secondUserId);
+            logger.info(`roomType:${room.roomType} || gender:${getUser.gender} `);
+            if (getUser.gender === 'male') {
+              await updateCoinInUser(coinAmount, getUser);
+            }
+          }
+
+          console.log(' === otherUserId.mobileNumber === > ', otherUserId.mobileNumber);
+
+          socket.to(otherUserId.mobileNumber).emit('coinUpdated', {
+            callee: socket.user,
+            callerId: data.callerId,
+          });
+        }
+        // await updateUserCoin(room.userIdThatStartCall, otherUserId.userId._id, coinAmount);
 
         // make event for updated coin ( this two user coin has update ( userid  => fetch both user and get update user ))
         socket.to(callerId).emit('coinUpdated', {
-          callee: socket.user,
-          callerId: data.callerId,
-        });
-
-        console.log(' === otherUserId.mobileNumber === > ', otherUserId.mobileNumber);
-
-        socket.to(otherUserId.mobileNumber).emit('coinUpdated', {
           callee: socket.user,
           callerId: data.callerId,
         });
