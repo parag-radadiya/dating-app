@@ -303,6 +303,11 @@ export function initMeetingServerBase(server) {
         // letter we add into user that how much user want to take.
         // userSpendTimeInTime
 
+        socket.to(callerId).emit('userEndedMeeting', {
+          callee: socket.user,
+          callerId: data.callerId,
+        });
+
         if (secondUserId) {
           const coinAmount = userSpendTimeInTime;
           logger.info(`roomId:${roomId} coinAmount:${coinAmount} || userIdThatStartCall:${room.userIdThatStartCall}`);
@@ -361,11 +366,6 @@ export function initMeetingServerBase(server) {
 
         // make event for updated coin ( this two user coin has update ( userid  => fetch both user and get update user ))
         socket.to(callerId).emit('coinUpdated', {
-          callee: socket.user,
-          callerId: data.callerId,
-        });
-
-        socket.to(callerId).emit('userEndedMeeting', {
           callee: socket.user,
           callerId: data.callerId,
         });
