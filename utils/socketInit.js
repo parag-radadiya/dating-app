@@ -332,6 +332,8 @@ export function initMeetingServerBase(server) {
           // trainer => male join => cut money.
           // we have to send amount and user id for cut amount from only one user side.
           // roomType
+
+          logger.info(`userIdThatStartCall:${userIdThatStartCall} || roomType:${room.roomType} `);
           if (room.roomType === EnumRoomType.CHAT) {
             const getUser = await userService.getUserById(userIdThatStartCall);
             logger.info(`roomType:${room.roomType} || gender:${getUser.gender} `);
