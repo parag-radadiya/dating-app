@@ -272,7 +272,7 @@ export function initMeetingServerBase(server) {
 
       socket.on('endMeeting', async (data) => {
         // userSpendTimeInTime  =>  time in sec
-        const { callerId, roomId, userSpendTimeInTime, userId, userIdThatStartCall, secondUserId } = data;
+        const { callerId, roomId, userSpendTimeInTime, userId, isSingleUser } = data;
         logger.info(`socket end meeting for roomId = ${roomId} and caller id ${callerId}`);
         // socket.to(callerId).emit('userEndedMeeting', {
         //   callee: socket.user,
@@ -308,7 +308,7 @@ export function initMeetingServerBase(server) {
           callerId: data.callerId,
         });
 
-        if (secondUserId) {
+        if (!isSingleUser) {
           const coinAmount = userSpendTimeInTime;
           logger.info(`roomId:${roomId} coinAmount:${coinAmount} || userIdThatStartCall:${room.userIdThatStartCall}`);
 
@@ -338,9 +338,9 @@ export function initMeetingServerBase(server) {
           // we have to send amount and user id for cut amount from only one user side.
           // roomType
 
-          logger.info(`userIdThatStartCall:${userIdThatStartCall} || roomType:${room.roomType} `);
+          logger.info(`userIdThatStartCall:${room.userIdThatStartCall} || roomType:${room.roomType} `);
           if (room.roomType === EnumRoomType.CHAT) {
-            const getUser = await userService.getUserById(userIdThatStartCall);
+            const getUser = await userService.getUserById(room.userIdThatStartCall);
             logger.info(`roomType:${room.roomType} || gender:${getUser.gender} `);
 
             if (getUser.gender === 'male') {
@@ -348,7 +348,8 @@ export function initMeetingServerBase(server) {
             }
           }
           if (room.roomType === EnumRoomType.TRAINER) {
-            const getUser = await userService.getUserById(secondUserId);
+            const getUser = await userService.getOne({ mobileNumber: callerId });
+
             logger.info(`roomType:${room.roomType} || gender:${getUser.gender} `);
             if (getUser.gender === 'male') {
               await updateCoinInUser(coinAmount, getUser);
