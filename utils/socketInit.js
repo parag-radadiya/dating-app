@@ -272,6 +272,14 @@ export function initMeetingServerBase(server) {
         });
       });
 
+      socket.on('testEvent', (data) => {
+        console.log(' === variable  data == xx === > ', data);
+        // socket.to(calleeId).emit('IceCandidate', {
+        //   sender: socket.user,
+        //   iceCandidate,
+        // });
+      });
+
       socket.on('endMeeting', async (data) => {
         // userSpendTimeInTime  =>  time in sec
         const { callerId, roomId, userSpendTimeInTime, userId, isSingleUser } = data;
