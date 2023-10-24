@@ -96,13 +96,13 @@ export function initMeetingServerBase(server) {
       socket.join(socket.user);
 
       socket.on('makeCall', async (data) => {
-        const { calleeId, roomId, sdpOffer, isRoomTypeIsVideoCall, userId } = data;
+        const { calleeId, roomId, sdpOffer, isRoomTypeIsVideoCall } = data;
         logger.info(
           `makeCall event calleeId:${calleeId} | roomId:${roomId} | sdpOffer:${sdpOffer} | isRoomTypeIsVideoCall:${isRoomTypeIsVideoCall}`
         );
         const room = await roomService.updateRoom(
           { _id: roomId },
-          { sdpOffer, userIdThatStartCall: userId },
+          { sdpOffer },
           {
             new: true,
             populate: {

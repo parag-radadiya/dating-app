@@ -147,6 +147,7 @@ export const create = catchAsync(async (req, res) => {
     createdBy: user.id,
     isRoomTypeIsVideoCall: body.isRoomTypeIsVideoCall,
     roomType: body.roomType,
+    userIdThatStartCall: user.id,
     users: [
       {
         userId: user.id,
