@@ -32,10 +32,12 @@ export const createUser = {
     role: Joi.string().valid(...Object.values(enumFields.EnumRoleOfUser)),
     codes: Joi.array().items(codesEmbed),
     password: Joi.string(),
+    bio: Joi.string(),
     facebookProvider: facebookProviderEmbed,
     googleProvider: googleProviderEmbed,
     appleProvider: appleProviderEmbed,
     githubProvider: githubProviderEmbed,
+    appLanguage: Joi.string().valid(...Object.values(enumFields.EnumAppLanguage)),
   }),
 };
 
@@ -50,6 +52,8 @@ export const updateUser = {
     googleProvider: googleProviderEmbed,
     appleProvider: appleProviderEmbed,
     githubProvider: githubProviderEmbed,
+    bio: Joi.string(),
+    appLanguage: Joi.string().valid(...Object.values(enumFields.EnumAppLanguage)),
   }),
   params: Joi.object().keys({
     userId: Joi.objectId().required(),

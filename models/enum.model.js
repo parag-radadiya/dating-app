@@ -24,6 +24,11 @@ const EnumPlatformOfDeviceToken = {
   IOS: 'ios',
   WEB: 'web',
 };
+
+const EnumAppLanguage = {
+  ENGLISH: 'english',
+  HINDI: 'hindi',
+};
 const EnumTypeOfToken = {
   RESET_PASSWORD: 'resetPassword',
   VERIFY_EMAIL: 'verifyEmail',
@@ -57,4 +62,5 @@ module.exports = {
   MeetingPayloadEnum,
   EnumTransactionType,
   EnumRoomType,
+  EnumAppLanguage,
 };

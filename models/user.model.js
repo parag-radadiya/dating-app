@@ -149,6 +149,14 @@ const UserSchema = new mongoose.Schema({
   coin: {
     type: Number,
   },
+  appLanguage: {
+    type: String,
+    enum: Object.values(enumModel.EnumAppLanguage),
+    default: enumModel.EnumAppLanguage.ENGLISH,
+  },
+  bio: {
+    type: String,
+  },
 });
 UserSchema.plugin(toJSON);
 UserSchema.plugin(mongoosePaginateV2);
