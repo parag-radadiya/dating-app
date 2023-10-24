@@ -116,14 +116,16 @@ export function initMeetingServerBase(server) {
 
         console.log(' === calleeId === > ', calleeId);
 
-        socket.to(calleeId).emit('newCall', {
-          room,
-          callerId: socket.user,
-          sdpOffer,
-          roomId,
-          isRoomTypeIsVideoCall,
-          user,
-        });
+        if (room.roomType !== EnumRoomType.TRAINER) {
+          socket.to(calleeId).emit('newCall', {
+            room,
+            callerId: socket.user,
+            sdpOffer,
+            roomId,
+            isRoomTypeIsVideoCall,
+            user,
+          });
+        }
 
         console.log(' === variable === > newCall event emitted ');
       });
