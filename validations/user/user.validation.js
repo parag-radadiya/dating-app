@@ -66,6 +66,26 @@ export const getUserById = {
   }),
 };
 
+export const sendFollowingRequest = {
+  body: Joi.object().keys({
+    friend: Joi.objectId().required(),
+    user: Joi.objectId().required(),
+    status: Joi.string().valid(...['follower', 'following', 'blocked']),
+  }),
+};
+
+export const getFollowingUsers = {
+  params: Joi.object().keys({
+    userId: Joi.objectId().required(),
+  }),
+};
+
+export const geFollowerUsers = {
+  params: Joi.object().keys({
+    userId: Joi.objectId().required(),
+  }),
+};
+
 export const deleteUserById = {
   params: Joi.object().keys({
     userId: Joi.objectId().required(),

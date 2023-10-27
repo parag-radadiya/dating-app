@@ -1,6 +1,6 @@
 import ApiError from 'utils/ApiError';
 import httpStatus from 'http-status';
-import { User } from 'models';
+import { User, Friend } from 'models';
 import _ from 'lodash';
 import { notificationService } from './index';
 
@@ -17,6 +17,37 @@ export async function getOne(query, options = {}) {
 export async function getUserList(filter, options = {}) {
   const user = await User.find(filter, options.projection, options);
   return user;
+}
+
+export async function findExistingFollower(filter) {
+  const friend = await Friend.findOne(filter);
+  return friend;
+}
+export async function sendFollowingRequest(body) {
+  const friend = await Friend.create(body);
+  return friend;
+}
+
+export async function getFollowingUsers(body) {
+  const friend = await Friend.find({
+    user: body.userId,
+    status: 'following',
+  })
+    .populate('friend')
+    .populate('user')
+    .exec();
+  return friend;
+}
+
+export async function geFollowerUsers(body) {
+  const friend = await Friend.find({
+    friend: body.userId,
+    status: 'following',
+  })
+    .populate('friend')
+    .populate('user')
+    .exec();
+  return friend;
 }
 
 export async function getUserListWithPagination(filter, options = {}) {

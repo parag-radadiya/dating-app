@@ -40,4 +40,16 @@ router
    * getUserById
    * */
   .get(validate(userValidation.getUserById), userController.get);
+
+router
+  .route('/send-following-request')
+  .post(validate(userValidation.sendFollowingRequest), userController.sendFollowingRequest);
+
+router
+  .route('/get-following-users/:userId')
+  .get(validate(userValidation.getFollowingUsers), userController.getFollowingUsers);
+
+router
+  .route('/get-follower-users/:userId')
+  .get(validate(userValidation.geFollowerUsers), userController.geFollowerUsersController);
 export default router;

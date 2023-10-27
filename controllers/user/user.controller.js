@@ -3,6 +3,7 @@ import { userService } from 'services';
 import { catchAsync } from 'utils/catchAsync';
 import { pick } from '../../utils/pick';
 import { EnumRoleOfUser } from '../../models/enum.model';
+import ApiError from '../../utils/ApiError';
 
 export const get = catchAsync(async (req, res) => {
   const { userId } = req.params;
@@ -19,6 +20,32 @@ export const list = catchAsync(async (req, res) => {
   const options = {};
   const user = await userService.getUserList(filter, options);
   return res.status(httpStatus.OK).send({ results: user });
+});
+
+export const sendFollowingRequest = catchAsync(async (req, res) => {
+  const options = {};
+  const { user, friend } = req.body;
+  const getExistingFriendOrNot = await userService.findExistingFollower({
+    user,
+    friend,
+  });
+  if (getExistingFriendOrNot) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'user already following other user');
+  }
+  const getFriend = await userService.sendFollowingRequest(req.body, options);
+  return res.status(httpStatus.OK).send({ results: getFriend });
+});
+
+export const getFollowingUsers = catchAsync(async (req, res) => {
+  const options = {};
+  const friend = await userService.getFollowingUsers(req.params, options);
+  return res.status(httpStatus.OK).send({ results: friend });
+});
+
+export const geFollowerUsersController = catchAsync(async (req, res) => {
+  const options = {};
+  const friend = await userService.geFollowerUsers(req.params, options);
+  return res.status(httpStatus.OK).send({ results: friend });
 });
 
 export const getAvailableTrainerForMeet = catchAsync(async (req, res) => {

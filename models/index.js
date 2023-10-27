@@ -9,4 +9,4 @@ module.exports.plugins = require('./plugins');
 module.exports.Message = require('./chat.model');
 module.exports.Emoji = require('./emogi.model');
 module.exports.Transaction = require('./transaction.model');
-module.exports.Transaction = require('./transaction.model');
+module.exports.Friend = require('./friend.model');
