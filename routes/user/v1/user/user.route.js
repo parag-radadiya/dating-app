@@ -46,6 +46,14 @@ router
   .post(validate(userValidation.sendFollowingRequest), userController.sendFollowingRequest);
 
 router
+  .route('/send-unfollowing-request')
+  .post(validate(userValidation.sendUnfollowingRequest), userController.sendUnfollowingRequest);
+
+router
+  .route('/get-follower-following-count')
+  .post(validate(userValidation.sendUnfollowingRequest), userController.getFollowingFollowerCount);
+
+router
   .route('/get-following-users/:userId')
   .get(validate(userValidation.getFollowingUsers), userController.getFollowingUsers);
 

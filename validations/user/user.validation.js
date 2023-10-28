@@ -70,7 +70,14 @@ export const sendFollowingRequest = {
   body: Joi.object().keys({
     friend: Joi.objectId().required(),
     user: Joi.objectId().required(),
-    status: Joi.string().valid(...['follower', 'following', 'blocked']),
+    status: Joi.string().valid(...Object.values(enumFields.EnumOfFriends)),
+  }),
+};
+
+export const sendUnfollowingRequest = {
+  body: Joi.object().keys({
+    friend: Joi.objectId().required(),
+    user: Joi.objectId().required(),
   }),
 };
 

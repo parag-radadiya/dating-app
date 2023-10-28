@@ -54,6 +54,13 @@ const MeetingPayloadEnum = {
   UNKNOWN: 'unknown',
 };
 
+const EnumOfFriends = {
+  FOLLOWER: 'follower',
+  FOLLOWING: 'following',
+  BLOCKED: 'blocked',
+  UNFOLLOW: 'unfollow',
+};
+
 module.exports = {
   EnumCodeTypeOfCode,
   EnumRoleOfUser,
@@ -63,4 +70,5 @@ module.exports = {
   EnumTransactionType,
   EnumRoomType,
   EnumAppLanguage,
+  EnumOfFriends,
 };

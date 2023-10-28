@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import { User, Friend } from 'models';
 import _ from 'lodash';
 import { notificationService } from './index';
+import enumModel from '../models/enum.model';
 
 export async function getUserById(id, options = {}) {
   const user = await User.findById(id, options.projection, options);
@@ -28,10 +29,14 @@ export async function sendFollowingRequest(body) {
   return friend;
 }
 
+export async function sendUnfollowingRequest(filter, body) {
+  return Friend.findOneAndUpdate(filter, body, { new: true });
+}
+
 export async function getFollowingUsers(body) {
   const friend = await Friend.find({
     user: body.userId,
-    status: 'following',
+    status: enumModel.EnumOfFriends.FOLLOWING,
   })
     .populate('friend')
     .populate('user')
@@ -39,10 +44,24 @@ export async function getFollowingUsers(body) {
   return friend;
 }
 
+export async function getCountForFollowerAndFollowing(body) {
+  const getFollowingDetails = await Friend.countDocuments({
+    user: body.friend,
+    status: enumModel.EnumOfFriends.FOLLOWING,
+  });
+
+  const getFollowerDetails = await Friend.countDocuments({
+    friend: body.friend,
+    status: enumModel.EnumOfFriends.FOLLOWING,
+  });
+
+  return { getFollowingDetails, getFollowerDetails };
+}
+
 export async function geFollowerUsers(body) {
   const friend = await Friend.find({
     friend: body.userId,
-    status: 'following',
+    status: enumModel.EnumOfFriends.FOLLOWING,
   })
     .populate('friend')
     .populate('user')

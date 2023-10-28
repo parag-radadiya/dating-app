@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { toJSON } = require('./plugins');
+const enumModel = require('./enum.model');
 
 const statusHistorySchema = mongoose.Schema({
   status: { type: String, enum: ['follower', 'following', 'blocked'], required: true },
@@ -32,7 +33,7 @@ const friendSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['follower', 'following', 'blocked'],
+      enum: enumModel.EnumOfFriends,
       required: true,
     },
     active: {
