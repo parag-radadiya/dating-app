@@ -58,6 +58,10 @@ router
   .get(validate(userValidation.getFollowingUsers), userController.getFollowingUsers);
 
 router
+  .route('/check-user-following-each-other')
+  .post(validate(userValidation.checkUserFollowingEachOther), userController.checkUserFollowingEachOther);
+
+router
   .route('/get-follower-users/:userId')
   .get(validate(userValidation.geFollowerUsers), userController.geFollowerUsersController);
 export default router;

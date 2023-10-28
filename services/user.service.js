@@ -33,6 +33,10 @@ export async function sendUnfollowingRequest(filter, body) {
   return Friend.findOneAndUpdate(filter, body, { new: true });
 }
 
+export async function findFrdDetails(filter) {
+  return Friend.find(filter);
+}
+
 export async function getFollowingUsers(body) {
   const friend = await Friend.find({
     user: body.userId,
@@ -46,12 +50,12 @@ export async function getFollowingUsers(body) {
 
 export async function getCountForFollowerAndFollowing(body) {
   const getFollowingDetails = await Friend.countDocuments({
-    user: body.friend,
+    user: body.user,
     status: enumModel.EnumOfFriends.FOLLOWING,
   });
 
   const getFollowerDetails = await Friend.countDocuments({
-    friend: body.friend,
+    friend: body.user,
     status: enumModel.EnumOfFriends.FOLLOWING,
   });
 

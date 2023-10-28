@@ -59,10 +59,9 @@ export const sendUnfollowingRequest = catchAsync(async (req, res) => {
 });
 
 export const getFollowingFollowerCount = catchAsync(async (req, res) => {
-  const { user, friend } = req.body;
+  const { user } = req.body;
   const followingDetails = await userService.getCountForFollowerAndFollowing({
     user,
-    friend,
     status: enumModel.EnumOfFriends.FOLLOWING,
   });
   return res.status(httpStatus.OK).send({ results: followingDetails });
@@ -71,6 +70,10 @@ export const getFollowingFollowerCount = catchAsync(async (req, res) => {
 export const getFollowingUsers = catchAsync(async (req, res) => {
   const options = {};
   const friend = await userService.getFollowingUsers(req.params, options);
+  return res.status(httpStatus.OK).send({ results: friend });
+});
+export const checkUserFollowingEachOther = catchAsync(async (req, res) => {
+  const friend = await userService.findFrdDetails(req.body);
   return res.status(httpStatus.OK).send({ results: friend });
 });
 
