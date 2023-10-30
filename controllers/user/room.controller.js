@@ -4,6 +4,8 @@ import { catchAsync } from 'utils/catchAsync';
 import { pick } from '../../utils/pick';
 import ApiError from '../../utils/ApiError';
 
+const axios = require('axios');
+
 export const get = catchAsync(async (req, res) => {
   const { roomId } = req.params;
   const filter = {
@@ -142,12 +144,19 @@ export const create = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'user is not available for meet');
   }
 
+  const channelName = `${user._id}-${Date.now()}`; // Replace 'your_channel_name' with the desired channel name
+
+  // create channel name here
+  const apiUrl = `https://agora-node-tokenserver.testingdata.repl.co/access_token?channelName=${channelName}`;
+  const agoraToken = await axios.get(apiUrl);
+
   const createRoomObj = {
     updatedBy: user.id,
     createdBy: user.id,
     isRoomTypeIsVideoCall: body.isRoomTypeIsVideoCall,
     roomType: body.roomType,
     userIdThatStartCall: user.id,
+    agoraToken: agoraToken.data.token,
     users: [
       {
         userId: user.id,

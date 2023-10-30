@@ -77,6 +77,7 @@ export const sendFollowingRequest = {
 export const sendUnfollowingRequest = {
   body: Joi.object().keys({
     user: Joi.objectId().required(),
+    friend: Joi.objectId(),
   }),
 };
 

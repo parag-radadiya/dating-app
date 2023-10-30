@@ -64,4 +64,5 @@ router
 router
   .route('/get-follower-users/:userId')
   .get(validate(userValidation.geFollowerUsers), userController.geFollowerUsersController);
+
 export default router;

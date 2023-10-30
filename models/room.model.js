@@ -60,6 +60,7 @@ const RoomSchema = new mongoose.Schema(
       type: String,
       enum: Object.values(enumModel.EnumRoomType),
     },
+    agoraToken: String,
     userIdThatStartCall: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
