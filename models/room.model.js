@@ -61,6 +61,7 @@ const RoomSchema = new mongoose.Schema(
       enum: Object.values(enumModel.EnumRoomType),
     },
     agoraToken: String,
+    channelName: String,
     userIdThatStartCall: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

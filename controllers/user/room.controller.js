@@ -157,6 +157,7 @@ export const create = catchAsync(async (req, res) => {
     roomType: body.roomType,
     userIdThatStartCall: user.id,
     agoraToken: agoraToken.data.token,
+    channelName,
     users: [
       {
         userId: user.id,
