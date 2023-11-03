@@ -43,6 +43,14 @@ export const getRoomById = {
   }),
 };
 
+export const updateRoom = {
+  // todo : add validation here after creating proper api for calling functionality
+  params: Joi.object().keys({
+    roomId: Joi.objectId().required(),
+  }),
+  body: Joi.object().keys({}),
+};
+
 export const getMessageById = {
   // todo : add validation here after creating proper api for calling functionality
   body: Joi.object().keys({

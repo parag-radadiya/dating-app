@@ -74,6 +74,14 @@ export const sendFollowingRequest = {
   }),
 };
 
+export const sendBlockRequest = {
+  body: Joi.object().keys({
+    friend: Joi.objectId().required(),
+    user: Joi.objectId().required(),
+    status: Joi.string().valid(...Object.values(enumFields.EnumOfFriends)),
+  }),
+};
+
 export const sendUnfollowingRequest = {
   body: Joi.object().keys({
     user: Joi.objectId().required(),

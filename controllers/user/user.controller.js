@@ -36,6 +36,28 @@ export const sendFollowingRequest = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send({ results: getFriend });
 });
 
+export const sendBlockRequest = catchAsync(async (req, res) => {
+  const options = {};
+  const { user, friend } = req.body;
+  const getExistingFriendOrNot = await userService.findExistingFollower({
+    user,
+    friend,
+  });
+  let getFriend;
+  if (getExistingFriendOrNot) {
+    getFriend = await userService.sendUnfollowingRequest(
+      {
+        _id: getExistingFriendOrNot._id,
+      },
+      {
+        status: enumModel.EnumOfFriends.BLOCKED,
+      }
+    );
+  }
+  getFriend = await userService.sendFollowingRequest(req.body, options);
+  return res.status(httpStatus.OK).send({ results: getFriend });
+});
+
 export const sendUnfollowingRequest = catchAsync(async (req, res) => {
   const { user, friend } = req.body;
   const getExistingFriendOrNot = await userService.findExistingFollower({

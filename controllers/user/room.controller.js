@@ -185,7 +185,7 @@ export const create = catchAsync(async (req, res) => {
 
 export const update = catchAsync(async (req, res) => {
   const { body } = req;
-  body.updatedBy = req.user;
+  // body.updatedBy = req.user;
   const { roomId } = req.params;
   const filter = {
     _id: roomId,

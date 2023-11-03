@@ -65,4 +65,6 @@ router
   .route('/get-follower-users/:userId')
   .get(validate(userValidation.geFollowerUsers), userController.geFollowerUsersController);
 
+router.route('/send-block-request').post(validate(userValidation.sendBlockRequest), userController.sendBlockRequest);
+
 export default router;
