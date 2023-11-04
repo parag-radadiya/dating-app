@@ -209,7 +209,7 @@ export const update = catchAsync(async (req, res) => {
   if (body.userId && body.roomEndTime) {
     room = await roomService.updateRoom(
       { _id: roomId, 'users.userId': body.userId },
-      { $set: { 'users.$.roomEndTime': body.roomEndTime } }
+      { $set: { 'users.$.roomEndTime': body.roomEndTime }, roomEndTime: body.roomEndTime }
     );
   } else {
     room = await roomService.updateRoom(filter, body, options);
