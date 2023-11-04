@@ -48,7 +48,12 @@ export const updateRoom = {
   params: Joi.object().keys({
     roomId: Joi.objectId().required(),
   }),
-  body: Joi.object().keys({}),
+  body: Joi.object().keys({
+    userId: Joi.objectId(),
+    roomStartTime: Joi.date(),
+    roomEndTime: Joi.date(),
+    bothUserJoined: Joi.boolean(),
+  }),
 };
 
 export const getMessageById = {

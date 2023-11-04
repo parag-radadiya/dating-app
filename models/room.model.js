@@ -8,6 +8,9 @@ const roomUserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  roomEndTime: {
+    type: Date,
+  },
   mobileNumber: {
     type: Number,
     private: true,
@@ -60,6 +63,7 @@ const RoomSchema = new mongoose.Schema(
       type: String,
       enum: Object.values(enumModel.EnumRoomType),
     },
+    bothUserJoined: Boolean,
     agoraToken: String,
     channelName: String,
     userIdThatStartCall: {

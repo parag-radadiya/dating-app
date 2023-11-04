@@ -191,7 +191,29 @@ export const update = catchAsync(async (req, res) => {
     _id: roomId,
   };
   const options = { new: true };
-  const room = await roomService.updateRoom(filter, body, options);
+  let room;
+  if (body.userId && body.roomStartTime) {
+    room = await roomService.updateRoom(
+      { _id: roomId },
+      {
+        $addToSet: {
+          users: {
+            userId: body.userId,
+            userCallStartTime: body.roomStartTime,
+          },
+        },
+      },
+      options
+    );
+  }
+  if (body.userId && body.roomEndTime) {
+    room = await roomService.updateRoom(
+      { _id: roomId, 'users.userId': body.userId },
+      { $set: { 'users.$.roomEndTime': body.roomEndTime } }
+    );
+  } else {
+    room = await roomService.updateRoom(filter, body, options);
+  }
   return res.status(httpStatus.OK).send({ results: room });
 });
 
