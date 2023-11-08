@@ -76,6 +76,9 @@ export const getCoinPlan = {
   body: Joi.object().keys({}).unknown(true),
 };
 export const getTransaction = {
+  params: Joi.object().keys({
+    userId: Joi.objectId().required(),
+  }),
   body: Joi.object().keys({}).unknown(true),
 };
 

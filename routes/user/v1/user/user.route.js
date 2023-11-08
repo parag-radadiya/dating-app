@@ -71,7 +71,7 @@ router.route('/blocked-by-you/:userId').post(validate(userValidation.blockedByUs
 
 router.route('/get-coin-plan').get(validate(userValidation.getCoinPlan), userController.getCoinPlan);
 
-router.route('/get-last-transaction').get(validate(userValidation.getTransaction), userController.getTransaction);
+router.route('/get-last-transaction/:userId').get(validate(userValidation.getTransaction), userController.getTransaction);
 
 router.route('/add-coin-to-user/:userId').get(validate(userValidation.addCoinToUser), userController.addCoinToUser);
 

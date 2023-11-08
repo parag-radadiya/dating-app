@@ -82,7 +82,14 @@ export const getCoinPlan = catchAsync(async (req, res) => {
 });
 
 export const getTransaction = catchAsync(async (req, res) => {
-  const getTransactions = await traansactionService.getTransactionList({}, { sort: 'createdAt', limit: 50 });
+  const { userId } = req.params;
+
+  const getTransactions = await traansactionService.getTransactionList(
+    {
+      $or: [{ receiverUserId: userId }, { senderUserId: userId }],
+    },
+    { sort: 'createdAt', limit: 50 }
+  );
   return res.status(httpStatus.OK).send({ results: getTransactions });
 });
 
