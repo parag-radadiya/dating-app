@@ -72,8 +72,16 @@ export const blockedByUser = {
   }),
 };
 
-export const getCoinPlan = {
-  body: Joi.object().keys({}).unknown(true),
+export const getCoinPlans = {
+  params: Joi.object().keys({}).unknown(true),
+};
+
+export const addCoinPlans = {
+  body: Joi.object()
+    .keys({
+      amountPerUnit: Joi.number().required(),
+    })
+    .unknown(true),
 };
 export const getTransaction = {
   params: Joi.object().keys({

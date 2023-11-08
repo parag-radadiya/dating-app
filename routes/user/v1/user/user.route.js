@@ -4,6 +4,11 @@ import { userValidation } from 'validations/user';
 import validate from 'middlewares/validate';
 
 const router = express.Router();
+
+router.route('/get-coin-plans').get(validate(userValidation.getCoinPlans), userController.getCoinPlan);
+
+router.route('/add-coin-plan').get(validate(userValidation.addCoinPlans), userController.addCoinPlans);
+
 router
   .route('/')
   /**
@@ -68,8 +73,6 @@ router
 router.route('/send-block-request').post(validate(userValidation.sendBlockRequest), userController.sendBlockRequest);
 
 router.route('/blocked-by-you/:userId').post(validate(userValidation.blockedByUser), userController.blockedByUser);
-
-router.route('/get-coin-plan').get(validate(userValidation.getCoinPlan), userController.getCoinPlan);
 
 router.route('/get-last-transaction/:userId').get(validate(userValidation.getTransaction), userController.getTransaction);
 

@@ -81,6 +81,11 @@ export const getCoinPlan = catchAsync(async (req, res) => {
   return res.status(httpStatus.OK).send({ results: getPlans });
 });
 
+export const addCoinPlans = catchAsync(async (req, res) => {
+  const createPlan = await coinPalnService.createCoinPlan(req.body);
+  return res.status(httpStatus.OK).send({ results: createPlan });
+});
+
 export const getTransaction = catchAsync(async (req, res) => {
   const { userId } = req.params;
 
