@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import { userService } from 'services';
+import { coinPalnService, userService } from 'services';
 import { catchAsync } from 'utils/catchAsync';
 import { pick } from '../../utils/pick';
 import enumModel, { EnumRoleOfUser } from '../../models/enum.model';
@@ -56,6 +56,29 @@ export const sendBlockRequest = catchAsync(async (req, res) => {
   }
   getFriend = await userService.sendFollowingRequest(req.body, options);
   return res.status(httpStatus.OK).send({ results: getFriend });
+});
+
+export const blockedByUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const friend = await userService.findFrdDetails({
+    user: userId,
+    status: enumModel.EnumOfFriends.BLOCKED,
+  });
+  return res.status(httpStatus.OK).send({ results: friend });
+});
+
+export const blockedByOtherUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const friend = await userService.findFrdDetails({
+    friend: userId,
+    status: enumModel.EnumOfFriends.BLOCKED,
+  });
+  return res.status(httpStatus.OK).send({ results: friend });
+});
+
+export const getCoinPlan = catchAsync(async (req, res) => {
+  const getPlans = await coinPalnService.getCoinPlanList({});
+  return res.status(httpStatus.OK).send({ results: getPlans });
 });
 
 export const sendUnfollowingRequest = catchAsync(async (req, res) => {

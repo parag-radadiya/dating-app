@@ -10,3 +10,4 @@ module.exports.Message = require('./chat.model');
 module.exports.Emoji = require('./emogi.model');
 module.exports.Transaction = require('./transaction.model');
 module.exports.Friend = require('./friend.model');
+module.exports.CoinPlanModel = require('./coinPlan.model');

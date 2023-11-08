@@ -66,6 +66,21 @@ export const getUserById = {
   }),
 };
 
+export const blockedByUser = {
+  params: Joi.object().keys({
+    userId: Joi.objectId().required(),
+  }),
+};
+
+export const getCoinPlan = {
+  body: Joi.object().keys({}).unknown(true),
+};
+
+export const blockedByOtherUser = {
+  params: Joi.object().keys({
+    userId: Joi.objectId().required(),
+  }),
+};
 export const sendFollowingRequest = {
   body: Joi.object().keys({
     friend: Joi.objectId().required(),

@@ -67,4 +67,12 @@ router
 
 router.route('/send-block-request').post(validate(userValidation.sendBlockRequest), userController.sendBlockRequest);
 
+router.route('/blocked-by-you/:userId').post(validate(userValidation.blockedByUser), userController.blockedByUser);
+
+router.route('/get-coin-plan').get(validate(userValidation.getCoinPlan), userController.getCoinPlan);
+
+router
+  .route('/blocked-by-other-user/:userId')
+  .post(validate(userValidation.blockedByOtherUser), userController.blockedByOtherUser);
+
 export default router;
