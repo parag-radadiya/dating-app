@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import { coinPalnService, userService } from 'services';
+import { coinPalnService, traansactionService, userService } from 'services';
 import { catchAsync } from 'utils/catchAsync';
 import { pick } from '../../utils/pick';
 import enumModel, { EnumRoleOfUser } from '../../models/enum.model';
@@ -79,6 +79,18 @@ export const blockedByOtherUser = catchAsync(async (req, res) => {
 export const getCoinPlan = catchAsync(async (req, res) => {
   const getPlans = await coinPalnService.getCoinPlanList({});
   return res.status(httpStatus.OK).send({ results: getPlans });
+});
+
+export const getTransaction = catchAsync(async (req, res) => {
+  const getTransactions = await traansactionService.getTransactionList({}, { sort: 'createdAt', limit: 50 });
+  return res.status(httpStatus.OK).send({ results: getTransactions });
+});
+
+export const addCoinToUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const { amount } = req.body;
+  const updateCoinInUser = await userService.incrementCoinInUser({ _id: userId }, amount);
+  return res.status(httpStatus.OK).send({ results: updateCoinInUser });
 });
 
 export const sendUnfollowingRequest = catchAsync(async (req, res) => {

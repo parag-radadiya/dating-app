@@ -24,6 +24,22 @@ export async function findExistingFollower(filter) {
   const friend = await Friend.findOne(filter);
   return friend;
 }
+
+export async function incrementCoinInUser(filter, incNum) {
+  const updatedUser = await User.findOneAndUpdate(
+    filter,
+    {
+      $inc: {
+        coin: incNum,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  return updatedUser;
+}
+
 export async function sendFollowingRequest(body) {
   const friend = await Friend.create(body);
   return friend;

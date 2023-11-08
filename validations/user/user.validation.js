@@ -75,6 +75,19 @@ export const blockedByUser = {
 export const getCoinPlan = {
   body: Joi.object().keys({}).unknown(true),
 };
+export const getTransaction = {
+  body: Joi.object().keys({}).unknown(true),
+};
+
+export const addCoinToUser = {
+  params: Joi.object().keys({
+    userId: Joi.objectId().required(),
+  }),
+
+  body: Joi.object().keys({
+    amount: Joi.number().required(),
+  }),
+};
 
 export const blockedByOtherUser = {
   params: Joi.object().keys({
