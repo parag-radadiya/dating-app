@@ -50,7 +50,7 @@ export async function sendUnfollowingRequest(filter, body) {
 }
 
 export async function findFrdDetails(filter) {
-  return Friend.find(filter);
+  return Friend.find(filter).populate('friend').populate('user').exec();
 }
 
 export async function getFollowingUsers(body) {

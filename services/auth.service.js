@@ -22,7 +22,7 @@ export const loginUserWithEmailAndPassword = async (mobileNumber, password) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect mobileNumber or password');
   }
   if (!user.emailVerified) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Please check your mobileNumber and verify it to continue login in to app');
+    // throw new ApiError(httpStatus.BAD_REQUEST, 'Please check your mobileNumber and verify it to continue login in to app');
   }
   return user;
 };
