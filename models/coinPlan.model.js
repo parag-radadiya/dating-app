@@ -21,6 +21,9 @@ const CoinPlanSchema = new mongoose.Schema(
     amountPerUnit: {
       type: Number,
     },
+    amount: Number,
+    coins: Number,
+    discountPercentage: Number,
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );
