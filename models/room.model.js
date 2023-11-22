@@ -70,6 +70,10 @@ const RoomSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    isRoomTypeRj: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );
