@@ -8,6 +8,7 @@ export const createRoom = {
   body: Joi.object().keys({
     mobileNumber: Joi.number().required(),
     isRoomTypeIsVideoCall: Joi.boolean().required(),
+    isRoomTypeRj: Joi.boolean(),
     roomType: Joi.string().valid(...Object.values(enumFields.EnumRoomType)),
   }),
 };

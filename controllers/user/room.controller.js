@@ -154,6 +154,7 @@ export const create = catchAsync(async (req, res) => {
     updatedBy: user.id,
     createdBy: user.id,
     isRoomTypeIsVideoCall: body.isRoomTypeIsVideoCall,
+    isRoomTypeRj: body.isRoomTypeRj,
     roomType: body.roomType,
     userIdThatStartCall: user.id,
     agoraToken: agoraToken.data.token,

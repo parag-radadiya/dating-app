@@ -31,6 +31,10 @@ router
    * get-available-trainer-for-meet
    * */
   .get(validate(userValidation.getAvailableTrainerForMeet), userController.getAvailableTrainerForMeet);
+
+router
+  .route('/get-withdrawal-req')
+  .get(validate(userValidation.withdrawalReq), userController.getWithdrawalRequestController);
 router
   .route('/:userId')
   /**
@@ -75,6 +79,10 @@ router.route('/send-block-request').post(validate(userValidation.sendBlockReques
 router.route('/blocked-by-you/:userId').post(validate(userValidation.blockedByUser), userController.blockedByUser);
 
 router.route('/get-last-transaction/:userId').get(validate(userValidation.getTransaction), userController.getTransaction);
+
+router
+  .route('/add-withdrawal-transaction/:userId')
+  .post(validate(userValidation.withdrawalTransaction), userController.withdrawalTransaction);
 
 router.route('/add-coin-to-user/:userId').post(validate(userValidation.addCoinToUser), userController.addCoinToUser);
 
