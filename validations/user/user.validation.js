@@ -111,6 +111,10 @@ export const addCoinToUser = {
   }),
 };
 
+export const withdrawalReq = {
+  params: Joi.object().keys({}),
+};
+
 export const blockedByOtherUser = {
   params: Joi.object().keys({
     userId: Joi.objectId().required(),

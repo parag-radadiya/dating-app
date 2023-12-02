@@ -86,4 +86,8 @@ router
   .route('/blocked-by-other-user/:userId')
   .post(validate(userValidation.blockedByOtherUser), userController.blockedByOtherUser);
 
+router
+  .route('/get-withdrawal-req/:userId')
+  .get(validate(userValidation.withdrawalReq), userController.getWithdrawalRequestController);
+
 export default router;

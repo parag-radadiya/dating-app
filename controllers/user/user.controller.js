@@ -215,3 +215,8 @@ export const remove = catchAsync(async (req, res) => {
   const user = await userService.removeUser(filter);
   return res.status(httpStatus.OK).send({ results: user });
 });
+
+export const getWithdrawalRequestController = catchAsync(async (req, res) => {
+  const Withdrawal = await traansactionService.submitWithdrawalRequest();
+  return res.status(httpStatus.OK).send({ results: Withdrawal });
+});
