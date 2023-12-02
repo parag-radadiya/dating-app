@@ -33,7 +33,7 @@ export async function updateTransaction(filter, body, options = {}) {
 
 export async function submitWithdrawalRequest() {
   const getWithdrawalRequest = await Transaction.find({
-    status: enumModel.EnumTransactionType.SUBMIT_WITHDRAWAL_REQUEST,
+    transactionType: enumModel.EnumTransactionType.SUBMIT_WITHDRAWAL_REQUEST,
   });
   return getWithdrawalRequest;
 }
