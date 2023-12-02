@@ -31,6 +31,10 @@ router
    * get-available-trainer-for-meet
    * */
   .get(validate(userValidation.getAvailableTrainerForMeet), userController.getAvailableTrainerForMeet);
+
+router
+  .route('/get-withdrawal-req')
+  .get(validate(userValidation.withdrawalReq), userController.getWithdrawalRequestController);
 router
   .route('/:userId')
   /**
@@ -57,9 +61,6 @@ router
 router
   .route('/get-follower-following-count')
   .post(validate(userValidation.sendUnfollowingRequest), userController.getFollowingFollowerCount);
-router
-  .route('/get-withdrawal-req')
-  .get(validate(userValidation.withdrawalReq), userController.getWithdrawalRequestController);
 
 router
   .route('/get-following-users/:userId')
