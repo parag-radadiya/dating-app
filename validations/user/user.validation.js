@@ -90,6 +90,17 @@ export const getTransaction = {
   body: Joi.object().keys({}).unknown(true),
 };
 
+export const withdrawalTransaction = {
+  params: Joi.object().keys({
+    userId: Joi.objectId().required(),
+  }),
+  body: Joi.object()
+    .keys({
+      coinAmount: Joi.number().required(),
+    })
+    .unknown(true),
+};
+
 export const addCoinToUser = {
   params: Joi.object().keys({
     userId: Joi.objectId().required(),

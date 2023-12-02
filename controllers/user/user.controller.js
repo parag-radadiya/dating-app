@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import { coinPalnService, traansactionService, userService } from 'services';
 import { catchAsync } from 'utils/catchAsync';
 import { pick } from '../../utils/pick';
-import enumModel, { EnumRoleOfUser } from '../../models/enum.model';
+import enumModel, { EnumRoleOfUser, EnumTransactionType } from '../../models/enum.model';
 import ApiError from '../../utils/ApiError';
 
 export const get = catchAsync(async (req, res) => {
@@ -96,6 +96,18 @@ export const getTransaction = catchAsync(async (req, res) => {
     { sort: 'createdAt', limit: 50 }
   );
   return res.status(httpStatus.OK).send({ results: getTransactions });
+});
+
+export const withdrawalTransaction = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+
+  const createTransactions = await traansactionService.createTransaction({
+    coinAmount: req.body.coinAmount,
+    createdBy: userId,
+    updatedBy: userId,
+    transactionType: EnumTransactionType.SUBMIT_WITHDRAWAL_REQUEST,
+  });
+  return res.status(httpStatus.OK).send({ results: createTransactions });
 });
 
 export const addCoinToUser = catchAsync(async (req, res) => {

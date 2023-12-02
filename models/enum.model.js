@@ -12,6 +12,7 @@ const EnumTransactionType = {
   CREDIT: 'credit',
   DEBIT: 'debit',
   CALL_AMOUNT: 'call_amount',
+  SUBMIT_WITHDRAWAL_REQUEST: 'submitWithdrawalRequest',
 };
 
 const EnumRoomType = {
