@@ -57,6 +57,9 @@ router
 router
   .route('/get-follower-following-count')
   .post(validate(userValidation.sendUnfollowingRequest), userController.getFollowingFollowerCount);
+router
+  .route('/get-withdrawal-req')
+  .get(validate(userValidation.withdrawalReq), userController.getWithdrawalRequestController);
 
 router
   .route('/get-following-users/:userId')
@@ -85,9 +88,5 @@ router.route('/add-coin-to-user/:userId').post(validate(userValidation.addCoinTo
 router
   .route('/blocked-by-other-user/:userId')
   .post(validate(userValidation.blockedByOtherUser), userController.blockedByOtherUser);
-
-router
-  .route('/get-withdrawal-req/:userId')
-  .get(validate(userValidation.withdrawalReq), userController.getWithdrawalRequestController);
 
 export default router;
