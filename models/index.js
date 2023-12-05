@@ -11,3 +11,4 @@ module.exports.Emoji = require('./emogi.model');
 module.exports.Transaction = require('./transaction.model');
 module.exports.Friend = require('./friend.model');
 module.exports.CoinPlanModel = require('./coinPlan.model');
+module.exports.Profile = require('./profilepic.model');

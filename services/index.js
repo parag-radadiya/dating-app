@@ -14,3 +14,4 @@ module.exports.messageService = require('./message.services');
 module.exports.emojiService = require('./emoji.service');
 module.exports.coinPalnService = require('./coinPlan.service');
 module.exports.traansactionService = require('./transaction.service');
+module.exports.profileService = require('./profilrpic.service');

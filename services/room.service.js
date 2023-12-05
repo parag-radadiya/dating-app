@@ -8,7 +8,7 @@ export async function getRoomById(id, options = {}) {
 }
 
 export async function getOne(query, options = {}) {
-  const room = await Room.findOne(query, options.projection, options);
+  const room = await Room.findOne(query, options.projection, options).populate('users.userId').exec();
   return room;
 }
 
@@ -34,6 +34,7 @@ export async function createRoom(body = {}) {
 
 export async function updateRoom(filter, body, options = {}) {
   const room = await Room.findOneAndUpdate(filter, body, options).populate('users.userId').exec();
+
   return room;
 }
 
