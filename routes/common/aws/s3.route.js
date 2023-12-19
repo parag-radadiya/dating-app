@@ -11,4 +11,11 @@ const router = express();
 router.post('/presignedurl', auth(), validate(s3Validation.preSignedPutUrl), s3Controller.preSignedPutUrl);
 
 router.post('/upload-s3-image', validate(s3Validation.uploadS3image), s3Controller.uploadS3Image);
+
+router.get('/emojis', s3Controller.getEmojis);
+
+router.get('/festival-poster', s3Controller.getFestivalPoster);
+
+router.get('/frames', s3Controller.getFrames);
+
 module.exports = router;

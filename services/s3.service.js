@@ -244,3 +244,14 @@ export const createThumbnails = async ({ url, resolutions = [] }) => {
     return data;
   });
 };
+
+export const getImagesFromFolder = async (folderName) => {
+  const params = {
+    Bucket: config.aws.bucket,
+    Prefix: folderName,
+  };
+  const data = await s3.listObjects(params).promise();
+  let list =  data.Contents.map((ele) => `https://${config.aws.bucket}.s3.amazonaws.com/${ele.Key}`);
+  list.shift()
+  return list;
+}

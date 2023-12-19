@@ -4,6 +4,7 @@ import s3Routes from './common/aws/s3.route';
 
 import docsRoutes from './common/docs/swagger.route';
 
+
 const userRoutes = require('./user');
 const adminRoutes = require('./admin');
 

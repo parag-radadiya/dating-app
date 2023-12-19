@@ -23,3 +23,21 @@ export const uploadS3Image = catchAsync(async (req, res) => {
   // });
   return res.status(httpStatus.OK).send({ results: s3PutObject });
 });
+
+export const getEmojis = catchAsync(async (req, res) => {
+  // get images from emoji folder of s3 bucket
+  const s3PutObject = await s3Service.getImagesFromFolder("emoji/");
+  return res.status(httpStatus.OK).send({ results: s3PutObject });
+});
+
+export const getFestivalPoster = catchAsync(async (req, res) => {
+  // get images from emoji folder of s3 bucket
+  const s3PutObject = await s3Service.getImagesFromFolder("Festivallist/");
+  return res.status(httpStatus.OK).send({ results: s3PutObject });
+});
+
+export const getFrames = catchAsync(async (req, res) => {
+  // get images from emoji folder of s3 bucket
+  const s3PutObject = await s3Service.getImagesFromFolder("frames/");
+  return res.status(httpStatus.OK).send({ results: s3PutObject });
+});
