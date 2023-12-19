@@ -9,10 +9,10 @@
     "node": ">=12.0.0"
   },
   "scripts": {
-    "start": "pm2 start ecosystem.config.js --env development",
+    "start": "node api.js && pm2 start ecosystem.config.js --env development",
     "start-prod": "npm run build && pm2 start ecosystem.config.js --env production",
     "dev-es6": "nodemon --inspect index.js --exec babel-node -e js",
-    "build": "babel . --ignore node_modules --source-type module --out-dir build && cp .env build/ && cp utils/content-type.json build/utils/ && cp config/firebase.json build/config/ ",
+    "build": "node api.js && babel . --ignore node_modules --source-type module --out-dir build && cp .env build/ && cp utils/content-type.json build/utils/ && cp config/firebase.json build/config/",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check **/*.js",
