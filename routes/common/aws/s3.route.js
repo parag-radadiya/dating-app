@@ -18,4 +18,6 @@ router.get('/festival-poster', s3Controller.getFestivalPoster);
 
 router.get('/frames', s3Controller.getFrames);
 
+router.get('/test', (req, res) => res.send('test'))
+
 module.exports = router;

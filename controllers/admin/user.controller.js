@@ -61,3 +61,14 @@ export const remove = catchAsync(async (req, res) => {
   const user = await userService.removeUser(filter);
   return res.status(httpStatus.OK).send({ results: user });
 });
+
+export const getCoinValue = catchAsync(async (req, res) => {
+  const data = await userService.getCoinValue();
+  return res.status(httpStatus.OK).send({ results: data[0] });
+});
+
+export const updateCoinValue = catchAsync(async (req, res) => {
+  const { body } = req;
+  await userService.updateCoinValue(body.value);
+  return res.status(httpStatus.OK).send({ results: "Price Updated" });
+});

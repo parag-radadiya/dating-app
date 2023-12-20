@@ -34,4 +34,9 @@ router
    * getUserById
    * */
   .get(validate(userValidation.getUserById), userController.get);
+
+router
+  .route('/coinvalue/:userId')
+  .get(userController.getCoinValue)
+  .post(userController.updateCoinValue);  
 export default router;

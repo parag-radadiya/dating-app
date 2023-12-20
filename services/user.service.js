@@ -4,6 +4,7 @@ import { User, Friend } from 'models';
 import _ from 'lodash';
 import { notificationService } from './index';
 import enumModel from '../models/enum.model';
+import coinToInrModel from '../models/coinToInr.model'
 
 export async function getUserById(id, options = {}) {
   const user = await User.findById(id, options.projection, options);
@@ -158,4 +159,13 @@ export async function addDeviceToken(user, body) {
     const updatedUser = await updateUser({ _id: user._id }, user);
     return updatedUser;
   }
+}
+
+
+export async function updateCoinValue(body) {
+  return await coinToInrModel.findOneAndUpdate({}, { oneRsValueInCoin: body }, { upsert: true, new: true });
+}
+export async function getCoinValue() {
+  console.log("hehjhasdhjasbd")
+  return await coinToInrModel.find({});
 }
