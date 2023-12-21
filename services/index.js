@@ -5,6 +5,7 @@ module.exports.emailService = require('./email.service');
 module.exports.tokenService = require('./token.service');
 module.exports.passportService = require('./passport.service');
 module.exports.s3Service = require('./s3.service');
+module.exports.s3multerService = require('./s3multer.services');
 module.exports.temps3CronService = require('./temps3Cron.service');
 module.exports.notificationService = require('./notification.service');
 module.exports.stripeService = require('./stripe.service');

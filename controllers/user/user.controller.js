@@ -220,3 +220,8 @@ export const getWithdrawalRequestController = catchAsync(async (req, res) => {
   const Withdrawal = await traansactionService.submitWithdrawalRequest();
   return res.status(httpStatus.OK).send({ results: Withdrawal });
 });
+
+export const updateUserProfilePic = catchAsync(async (req, res) => {
+  await userService.updateUserProfile(req, res);
+  return res.status(httpStatus.OK).send({ results: "pofile picture updated" });
+});

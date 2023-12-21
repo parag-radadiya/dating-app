@@ -2,6 +2,9 @@ import express from 'express';
 import { userController } from 'controllers/user';
 import { userValidation } from 'validations/user';
 import validate from 'middlewares/validate';
+// import { s3multerService } from 'services';
+import { upload, uploadError, uploadBase64 } from '../../../../services/s3multer.services';
+
 
 const router = express.Router();
 
@@ -89,5 +92,7 @@ router.route('/add-coin-to-user/:userId').post(validate(userValidation.addCoinTo
 router
   .route('/blocked-by-other-user/:userId')
   .post(validate(userValidation.blockedByOtherUser), userController.blockedByOtherUser);
+
+router.post('/update-profilepic/:userId', uploadBase64, userController.updateUserProfilePic);
 
 export default router;

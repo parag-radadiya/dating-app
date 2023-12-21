@@ -166,6 +166,31 @@ export async function updateCoinValue(body) {
   return await coinToInrModel.findOneAndUpdate({}, { oneRsValueInCoin: body }, { upsert: true, new: true });
 }
 export async function getCoinValue() {
-  console.log("hehjhasdhjasbd")
   return await coinToInrModel.find({});
 }
+
+export async function updateUserProfile(req, res) {
+  // const user = await User.findOneAndUpdate({}, body, options);
+  try {
+    if (!req.file) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'profile picture not found');
+    }
+    let user = await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      {
+        $set: {
+          profileImage: req.file.location,
+        },
+      },
+      { new: true }
+    );
+    if (!user) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'user not found');
+    }
+    return "updated";
+  } catch (error) {
+    console.log("profileImageUpload error", error);
+    throw new ApiError(httpStatus.BAD_REQUEST, error.message);
+  }
+}
+
