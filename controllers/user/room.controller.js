@@ -163,7 +163,9 @@ export const create = catchAsync(async (req, res) => {
       {
         userId: user.id,
         mobileNumber: user.mobileNumber,
-        userCallStartTime: new Date(),
+        profileImage: user.profileImage,
+        nickName: user.nickName,
+        userCallStartTime: new Date()
       },
     ],
   };
