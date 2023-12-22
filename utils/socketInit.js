@@ -71,14 +71,22 @@ export function initMeetingServerBase(server) {
       logger.info(` socket user connected with mobile num ${socket}`);
       if (socket.user) {
         logger.info(`socket user ===> ${socket.user}`);
+
         await userService.updateUser(
           { mobileNumber: socket.user },
           {
             isUserOnline: true,
+            socketId: socket.id
           }
         );
       }
 
+      // await userService.updateUser(
+      //   { mobileNumber: socket.user },
+      //   {
+      //     socketId: socket.id,
+      //   }
+      // );
       socket.on('socketUserOnline', async (mobileNumber) => {
         logger.info(` socket user online with mobile num ${JSON.stringify(mobileNumber.mobileNumber)}
          || ${mobileNumber.mobileNumber}`);
@@ -400,7 +408,9 @@ export function initMeetingServerBase(server) {
       socket.on("userMutetoggle", async (data) => {
         const { callerId, roomId, isMute } = data;
         logger.info(`userMutetoggle event callerId:${callerId} | roomId:${roomId} | isMute:${isMute}`);
-        socket.to(callerId).emit("userMutetoggle", {
+        const { socketId } = await userService.getOne({ _id: callerId });
+        console.log("test", socketId)
+        socket.to(socketId).emit("userMutetoggle", {
           callee: socket.user,
           isMute,
         });

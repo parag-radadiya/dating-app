@@ -157,6 +157,10 @@ const UserSchema = new mongoose.Schema({
   bio: {
     type: String,
   },
+  socketId: {
+    type: String,
+    default: null,
+  }
 });
 UserSchema.plugin(toJSON);
 UserSchema.plugin(mongoosePaginateV2);
