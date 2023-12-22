@@ -396,6 +396,15 @@ export function initMeetingServerBase(server) {
           );
         }
       });
+
+      socket.on("userMutetoggle", async (data) => {
+        const { callerId, roomId, isMute } = data;
+        logger.info(`userMutetoggle event callerId:${callerId} | roomId:${roomId} | isMute:${isMute}`);
+        socket.to(callerId).emit("userMutetoggle", {
+          callee: socket.user,
+          isMute,
+        });
+      });
     });
   } catch (e) {
     console.log(' === error from server ===> ', e);
