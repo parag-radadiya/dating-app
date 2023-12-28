@@ -225,3 +225,10 @@ export const updateUserProfilePic = catchAsync(async (req, res) => {
   await userService.updateUserProfile(req, res);
   return res.status(httpStatus.OK).send({ results: "pofile picture updated" });
 });
+
+
+export const getallusers = catchAsync(async (req, res) => {
+  // select only profileImage and id
+  const users = await userService.getUserList({}, { select: 'profileImage _id nickName' });
+  return res.status(httpStatus.OK).send({ results: users });
+});

@@ -95,4 +95,10 @@ router
 
 router.post('/update-profilepic/:userId', uploadBase64, userController.updateUserProfilePic);
 
+router
+  .route('/getallusers/:userId')
+  .get(
+    userController.getallusers
+  );
+
 export default router;
