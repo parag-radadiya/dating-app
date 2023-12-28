@@ -10,6 +10,7 @@ export const createRoom = {
     isRoomTypeIsVideoCall: Joi.boolean().required(),
     isRoomTypeRj: Joi.boolean(),
     roomType: Joi.string().valid(...Object.values(enumFields.EnumRoomType)),
+    invitedUsers: Joi.array().items(Joi.objectId()),
   }),
 };
 

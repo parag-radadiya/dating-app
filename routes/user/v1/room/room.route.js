@@ -24,7 +24,7 @@ router
   );
 
 router
-  .route('/getAvailableAudioRoom')
+  .route('/getAvailableAudioRoom/:userId')
   /**
    * createTest
    * */

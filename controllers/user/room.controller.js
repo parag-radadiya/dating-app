@@ -100,19 +100,21 @@ export const deleteMessage = catchAsync(async (req, res) => {
 
   return res.status(httpStatus.OK).send({ results: 'ok' });
 });
+
 export const getAvailableAudioRoomForMeet = catchAsync(async (req, res) => {
   // const { isRoomTypeIsVideoCall } = req.query;
+
+
+  const { userId } = req.params;
   const filter = {
+    $or: [{ invitedUsers: { $in: [userId] } }, { invitedUsers: { $size: 0 } }],
+    createdBy: { $ne: userId },
     roomEndTime: { $exists: false },
   };
-  // if (isRoomTypeIsVideoCall) {
-  //   filter.isRoomTypeIsVideoCall = isRoomTypeIsVideoCall;
-  // } else {
-  //   filter.isRoomTypeIsVideoCall = false;
-  // }
   const room = await roomService.getRoomWithPopulateUserData(filter);
   return res.status(httpStatus.OK).send({ results: room });
 });
+
 
 export const paginate = catchAsync(async (req, res) => {
   const { query } = req;
@@ -156,6 +158,7 @@ export const create = catchAsync(async (req, res) => {
     isRoomTypeIsVideoCall: body.isRoomTypeIsVideoCall,
     isRoomTypeRj: body.isRoomTypeRj,
     roomType: body.roomType,
+    invitedUsers: body.invitedUsers,
     userIdThatStartCall: user.id,
     agoraToken: agoraToken.data.token,
     channelName,

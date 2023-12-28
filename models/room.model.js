@@ -74,6 +74,7 @@ const RoomSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    invitedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );
