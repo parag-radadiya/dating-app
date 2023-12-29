@@ -2,6 +2,7 @@ import AWS from "aws-sdk";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import config from 'config/config';
+import request from 'request-promise'
 
 AWS.config = new AWS.Config({
     accessKeyId: config.aws.accessKeyId, // stored in the .env file
@@ -55,20 +56,55 @@ export const uploadError = (error, req, res, next) => {
 };
 
 
-export const uploadBase64 = (req, res, next) => {
+// export const uploadBase64 = (req, res, next) => {
+//     if (req.body.profileImage) {
+//         const base64Data = new Buffer.from(
+//             req.body.profileImage.replace(/^data:image\/\w+;base64,/, ""),
+//             "base64"
+//         );
+//         const type = req.body.profileImage.split(";")[0].split("/")[1];
+//         const params = {
+//             Bucket: config.aws.bucket + "/profilepic",
+//             Key: `${Date.now()}.${type}`,
+//             Body: base64Data,
+//             ACL: "public-read",
+//             ContentEncoding: "base64",
+//             ContentType: `image/${type}`,
+//         };
+//         s3.upload(params, (error, data) => {
+//             if (error) {
+//                 console.log("error", error);
+//                 return res.status(enums.HTTP_CODES.BAD_REQUEST).send({
+//                     status: false,
+//                     message: "S3 UPLOAD ERROR",
+//                     error: error,
+//                 });
+//             }
+//             req.file = {
+//                 location: data.Location,
+//                 key: data.key,
+//             };
+//             next();
+//         });
+//     } else {
+//         next();
+//     }
+// }
+export const uploadBase64 = async (req, res, next) => {
     if (req.body.profileImage) {
-        const base64Data = new Buffer.from(
-            req.body.profileImage.replace(/^data:image\/\w+;base64,/, ""),
-            "base64"
-        );
-        const type = req.body.profileImage.split(";")[0].split("/")[1];
+        // upload image from URl with axios
+        const options = {
+            url: req.body.profileImage,
+            encoding: null
+        };
+        const response = await request(options);
         const params = {
             Bucket: config.aws.bucket + "/profilepic",
-            Key: `${Date.now()}.${type}`,
-            Body: base64Data,
+            Key: `${Date.now()}.${"jpg"}`,
+            Body: response,
             ACL: "public-read",
             ContentEncoding: "base64",
-            ContentType: `image/${type}`,
+            ContentType: `image/jpg`,
         };
         s3.upload(params, (error, data) => {
             if (error) {
@@ -85,7 +121,9 @@ export const uploadBase64 = (req, res, next) => {
             };
             next();
         });
+
     } else {
         next();
     }
+
 }
