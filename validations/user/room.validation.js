@@ -21,6 +21,14 @@ export const getRoom = {
   }),
 };
 
+export const getAvailableAudioRoom = {
+  // todo : add validation here after creating proper api for calling functionality
+  params: Joi.object().keys({
+    userId: Joi.objectId().required(),
+    isRoomTypeIsVideoCall: Joi.boolean()
+  }),
+};
+
 export const getRoomHistory = {
   // todo : add validation here after creating proper api for calling functionality
   params: Joi.object().keys({

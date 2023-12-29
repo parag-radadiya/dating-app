@@ -30,7 +30,7 @@ router
    * */
   .get(
     // auth('user'),
-    validate(roomValidation.getRoom),
+    validate(roomValidation.getAvailableAudioRoom),
     roomController.getAvailableAudioRoomForMeet
   );
 
